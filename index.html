@@ -224,6 +224,9 @@ body{overflow-x:hidden}
 .chat-form{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr) auto;gap:10px;margin-top:14px}
 .chat-form input{font:inherit;font-size:16px;color:var(--ink);background:var(--night);border:1px solid #4a4354;border-radius:999px;padding:12px 16px;min-width:0}
 .chat-form input:focus{outline:none;border-color:var(--head);box-shadow:0 0 0 3px color-mix(in srgb,var(--head) 30%,transparent)}
+.chat-form #chat-pass{grid-column:1/-1}
+.badge-creator{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;background:var(--head);color:var(--night);font-size:10px;font-weight:800;letter-spacing:.12em;vertical-align:1px}
+.msg.creator p{border-color:var(--head)}
 .chat-form .btn:disabled{opacity:.5;cursor:not-allowed}
 .chat-status{margin:8px 0 0;min-height:1.3em;font-size:14px;font-weight:700}
 .chat-status.err{color:#ff8fa3}
@@ -371,6 +374,8 @@ body{overflow-x:hidden}
           <label class="vh" for="chat-msg">Message</label>
           <input id="chat-msg" maxlength="300" placeholder="Say hi to everyone…" autocomplete="off" required>
           <input class="vh" id="chat-web" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <label class="vh" for="chat-pass">Creator passcode</label>
+          <input id="chat-pass" type="password" placeholder="Creator passcode" autocomplete="current-password" hidden>
           <button class="btn" type="submit" id="chat-send">Send</button>
         </form>
         <p class="chat-status" id="chat-status" role="status"></p>
@@ -550,19 +555,27 @@ body{overflow-x:hidden}
   const hm=d=>new Date(d).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
   const BAD=/(https?:\/\/|www\.|\.(com|net|org|ru|gg|io|xyz)\b|discord\.gg|t\.me\/)/i;
   const shown=new Set();
+  const passEl=document.getElementById('chat-pass');
+  // a random key for this browser: proves that a nickname belongs to the same person next time
+  let device='';try{device=localStorage.getItem('chat-device')||''}catch(_){}
+  if(device.length<16){const a=new Uint8Array(16);crypto.getRandomValues(a);device=[...a].map(b=>b.toString(16).padStart(2,'0')).join('');try{localStorage.setItem('chat-device',device)}catch(_){}}
+  let savedPass='';try{savedPass=localStorage.getItem('chat-pass')||''}catch(_){}
+  const looksReserved=n=>/werm|вермэ|верме|admin|админ/i.test(n);
+  const togglePass=()=>{passEl.hidden=!(looksReserved(nameEl.value)&&!savedPass)};
+  nameEl.addEventListener('input',togglePass);togglePass();
   function me(){try{return localStorage.getItem('chat-name')||''}catch(_){return ''}}
   function add(m){
     if(shown.has(m.id))return;shown.add(m.id);
     empty.hidden=true;
     const near=log.scrollHeight-log.scrollTop-log.clientHeight<80;
-    const el=document.createElement('div');el.className='msg'+(m.name===me()?' me':'');el.dataset.id=m.id;
-    el.innerHTML=`<span class="who">${esc(m.name)}<time>${hm(m.created_at)}</time></span><p>${esc(m.message)}</p>`;
+    const el=document.createElement('div');el.className='msg'+(m.name===me()?' me':'')+(m.verified?' creator':'');el.dataset.id=m.id;
+    el.innerHTML=`<span class="who">${esc(m.name)}${m.verified?'<span class="badge-creator">CREATOR</span>':''}<time>${hm(m.created_at)}</time></span><p>${esc(m.message)}</p>`;
     log.appendChild(el);
     while(log.querySelectorAll('.msg').length>80)log.querySelector('.msg').remove();
     if(near)log.scrollTop=log.scrollHeight;
   }
   empty.textContent='No messages yet. Start the conversation!';
-  db.from('chat_messages').select('id,name,message,created_at').order('id',{ascending:false}).limit(50)
+  db.from('chat_messages').select('id,name,message,created_at,verified').order('id',{ascending:false}).limit(50)
     .then(({data})=>{(data||[]).reverse().forEach(add);log.scrollTop=log.scrollHeight});
   db.channel('site-chat')
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'chat_messages'},p=>add(p.new))
@@ -579,9 +592,13 @@ body{overflow-x:hidden}
     if(Date.now()-last<5000)return say('Slow down a little.',1);
     last=Date.now();send.disabled=true;say('');
     try{localStorage.setItem('chat-name',name)}catch(_){}
-    const {error}=await db.from('chat_messages').insert({name,message});
+    const pass=savedPass||passEl.value.trim()||null;
+    if(looksReserved(name)&&!pass){send.disabled=false;passEl.hidden=false;passEl.focus();return say('This nickname is reserved. Pick another one.',1)}
+    const {error}=await db.rpc('chat_send',{p_name:name,p_message:message,p_device:device,p_pass:pass});
+    if(!error&&pass&&!savedPass){savedPass=pass;try{localStorage.setItem('chat-pass',pass)}catch(_){};passEl.value='';passEl.hidden=true}
     send.disabled=false;
-    if(error){const m=error.message||'';say(/paused/i.test(m)?'The chat is paused right now.':/not allowed/i.test(m)?'You can\'t send messages in this chat.':/busy/i.test(m)?'Slow down, try again in a minute.':/Duplicate/i.test(m)?'You already sent that.':/chat_clean|check/i.test(m)?'That message breaks the chat rules.':'Could not send, try again.',1);return}
+    if(error){const m=error.message||'';if(/Wrong passcode/i.test(m)){savedPass='';try{localStorage.removeItem('chat-pass')}catch(_){};passEl.hidden=false}
+    say(/Wrong passcode/i.test(m)?'Wrong passcode.':/reserved/i.test(m)?'This nickname is reserved. Pick another one.':/taken/i.test(m)?'This nickname is already taken. Pick another one.':/paused/i.test(m)?'The chat is paused right now.':/not allowed/i.test(m)?'You can\'t send messages in this chat.':/busy/i.test(m)?'Slow down, try again in a minute.':/Duplicate/i.test(m)?'You already sent that.':/chat_clean|check/i.test(m)?'That message breaks the chat rules.':'Could not send, try again.',1);return}
     msgEl.value='';msgEl.focus();
   });
 })();
