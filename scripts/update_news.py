@@ -22,6 +22,12 @@ from datetime import datetime, timezone
 CHANNEL_ID = "UCmPdSMqbyTZeL9AYISa0iVw"  # youtube.com/@wermyle
 MAX_VIDEOS = 6
 MAX_POSTS = 4
+
+# Mod teasers: every video whose title contains one of these phrases is collected automatically
+# and shown under "Read more" for that mod. Add a new mod by adding a line here.
+MOD_KEYWORDS = {
+    "happy-with-you": ["happy with you"],
+}
 OUT = os.path.join(os.path.dirname(__file__), "..", "news.json")
 
 NS = {
@@ -37,11 +43,11 @@ def get(url, headers=None):
         return r.read()
 
 
-def youtube_items():
+def rss_entries():
     xml = get(f"https://www.youtube.com/feeds/videos.xml?channel_id={CHANNEL_ID}")
     root = ET.fromstring(xml)
     items = []
-    for e in root.findall("a:entry", NS)[:MAX_VIDEOS]:
+    for e in root.findall("a:entry", NS):
         vid = e.findtext("yt:videoId", default="", namespaces=NS)
         group = e.find("media:group", NS)
         views = None
@@ -49,11 +55,8 @@ def youtube_items():
             stats = group.find("media:community/media:statistics", NS)
             if stats is not None and stats.get("views", "").isdigit():
                 views = int(stats.get("views"))
-        is_short = False
         link = e.find("a:link", NS)
         href = link.get("href") if link is not None else f"https://www.youtube.com/watch?v={vid}"
-        if "/shorts/" in href:
-            is_short = True
         items.append({
             "type": "video",
             "id": vid,
@@ -62,9 +65,53 @@ def youtube_items():
             "url": href,
             "thumb": f"https://i.ytimg.com/vi/{vid}/hqdefault.jpg",
             "views": views,
-            "short": is_short,
+            "short": "/shorts/" in href,
         })
     return items
+
+
+def all_uploads(max_pages=10):
+    """Whole upload history via the Data API (needs YOUTUBE_API_KEY), newest first."""
+    key = os.environ.get("YOUTUBE_API_KEY")
+    if not key:
+        return None
+    playlist = "UU" + CHANNEL_ID[2:]
+    videos, token = [], ""
+    for _ in range(max_pages):
+        data = json.loads(get(
+            "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50"
+            f"&playlistId={playlist}&key={key}" + (f"&pageToken={token}" if token else "")
+        ))
+        for it in data.get("items", []):
+            sn = it.get("snippet", {})
+            vid = sn.get("resourceId", {}).get("videoId")
+            if not vid or sn.get("title") in ("Private video", "Deleted video"):
+                continue
+            videos.append({
+                "type": "video",
+                "id": vid,
+                "title": sn.get("title", ""),
+                "date": sn.get("publishedAt", ""),
+                "url": f"https://www.youtube.com/watch?v={vid}",
+                "thumb": f"https://i.ytimg.com/vi/{vid}/hqdefault.jpg",
+            })
+        token = data.get("nextPageToken")
+        if not token:
+            break
+    return videos
+
+
+def mod_teasers(videos, old):
+    """Match videos to mods by keyword; keeps teasers found on earlier runs."""
+    out = {}
+    for mod, words in MOD_KEYWORDS.items():
+        found = {v["id"]: v for v in old.get(mod, [])}
+        for v in videos:
+            title = v.get("title", "").lower()
+            if any(w.lower() in title for w in words):
+                found[v["id"]] = {k: v.get(k) for k in ("id", "title", "date", "url", "thumb")}
+        out[mod] = sorted(found.values(), key=lambda v: v.get("date") or "", reverse=True)
+    return out
 
 
 def youtube_stats():
@@ -143,18 +190,30 @@ def main():
         stats = youtube_stats() or stats
     except Exception as exc:
         print(f"youtube stats failed: {exc}", file=sys.stderr)
-    items = []
-    for name, fn in (("youtube", youtube_items), ("discord", discord_items)):
-        try:
-            items += fn()
-        except Exception as exc:  # keep the other source even if one fails
-            print(f"{name} failed: {exc}", file=sys.stderr)
+    items, rss = [], []
+    try:
+        rss = rss_entries()
+        items += rss[:MAX_VIDEOS]
+    except Exception as exc:
+        print(f"youtube failed: {exc}", file=sys.stderr)
+    try:
+        items += discord_items()
+    except Exception as exc:  # keep the other source even if one fails
+        print(f"discord failed: {exc}", file=sys.stderr)
+    teasers = old.get("teasers", {})
+    try:
+        history = all_uploads()
+        teasers = mod_teasers(history if history is not None else rss, teasers)
+    except Exception as exc:
+        print(f"teasers failed: {exc}", file=sys.stderr)
+        teasers = mod_teasers(rss, teasers)
     if not items:
         items = old.get("items", [])  # keep the previous list if every source failed
     items.sort(key=lambda i: i.get("date") or "", reverse=True)
     out = {"updated": datetime.now(timezone.utc).isoformat(timespec="seconds"), "items": items}
     if stats:
         out["stats"] = stats
+    out["teasers"] = teasers
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=2)
     print(f"Wrote {len(items)} items")
