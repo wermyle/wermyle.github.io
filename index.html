@@ -1,0 +1,339 @@
+<title>Unnamed Template</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,400;0,500;0,700;0,800;1,800&display=swap">
+<style>
+/* Layout: light banner fading into a lavender band with centred logo+title → dark split sections (big image | centred text) → contacts → fixed vertical icon rail on the right */
+:root{
+  --paper:#f6f4f7;
+  --band:#bc9fcb;
+  --night:#1d1a21;
+  --night2:#26222b;
+  --ink:#f5f2f7;
+  --head:#dccbe6;
+  --soft:#bdb4c5;
+  --dark-ink:#1d1a21;
+  --sans:"Raleway",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --display:"Raleway",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--night);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6}
+a{color:inherit}
+.wrap{max-width:1100px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(64px,calc(env(safe-area-inset-right,0px) + 64px))}
+h1,h2,h3{margin:0;line-height:1.1;text-wrap:balance}
+:focus-visible{outline:2px solid var(--head);outline-offset:3px}
+
+/* placeholders */
+.q{display:inline-grid;place-items:center;border-radius:50%;font-weight:800;flex:none}
+.ph{border:2px dashed currentColor;border-radius:20px;display:grid;place-items:center;align-content:center;gap:10px;text-align:center;padding:16px;max-width:100%;opacity:.9}
+.ph small{font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:.7}
+
+/* hero */
+.hero{background:linear-gradient(180deg,var(--paper) 0 38%,var(--band) 68%,color-mix(in srgb,var(--band) 45%,var(--night)) 84%,var(--night) 100%);color:var(--dark-ink)}
+.hero .wrap{padding-block:40px 170px;display:flex;justify-content:center;align-items:center;gap:20px;flex-wrap:wrap}
+.hero .mark{width:clamp(110px,16vw,170px);aspect-ratio:1;border-radius:50%;padding:0}
+.hero .mark .q{width:56px;height:56px;font-size:28px;background:var(--dark-ink);color:var(--paper)}
+.hero h1{font-family:var(--display);font-size:clamp(44px,9vw,104px);font-weight:800;letter-spacing:-.02em}
+.hero h1 small{font-family:var(--sans)}
+.hero h1 small{display:block;font-size:.4em;font-weight:700;letter-spacing:0;opacity:.75}
+
+/* rail */
+.rail{position:fixed;right:calc(14px + env(safe-area-inset-right,0px));top:50%;transform:translateY(-50%);display:grid;gap:16px;z-index:5}
+.rail a{width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--night);display:grid;place-items:center;text-decoration:none;font-weight:800;font-size:14px;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.rail a:hover{background:var(--head)}
+
+/* dark split sections */
+section{padding-block:100px}
+section.alt{background:color-mix(in srgb,var(--night2) 65%,transparent)}
+/* background: rows of WERMYLE sliding left/right, alternating, filling the screen top to bottom */
+#mq{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding-block:1vh}
+#mq .row{display:flex;width:max-content;white-space:nowrap;font-family:var(--display);font-weight:800;font-size:clamp(56px,13vh,150px);line-height:1;letter-spacing:.02em;animation:mqL 60s linear infinite}
+#mq .row:nth-child(even){animation-name:mqR;animation-duration:70s}
+#mq .row span{padding-right:.5em;color:transparent;-webkit-text-stroke:1.5px rgba(188,159,203,.13)}
+#mq .row:nth-child(3n) span:nth-child(odd){color:rgba(188,159,203,.05);-webkit-text-stroke:0}
+@keyframes mqL{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes mqR{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+@media (prefers-reduced-motion:reduce){#mq .row{animation:none}}
+.hero{position:relative;z-index:0}
+.split{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:60px;align-items:center}
+.split .ph{aspect-ratio:1;width:100%;max-width:440px;color:var(--soft)}
+.hero .banner{width:100%;max-width:820px;height:auto;display:block;margin-inline:auto}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.hero .logo{width:clamp(140px,20vw,230px);height:auto;aspect-ratio:auto;border-radius:0;filter:drop-shadow(0 12px 24px rgba(0,0,0,.18))}
+.split .art{width:115%;max-width:600px;height:auto;justify-self:center;filter:drop-shadow(0 20px 40px rgba(0,0,0,.35))}
+.split .ph .q{width:64px;height:64px;font-size:32px;background:var(--ink);color:var(--night)}
+.text{display:grid;gap:22px;justify-items:center;text-align:center;min-width:0}
+.text h2{font-family:var(--display);font-size:clamp(38px,6.5vw,66px);font-weight:800;color:var(--head);letter-spacing:-.01em;text-transform:uppercase}
+.text p{margin:0;max-width:44ch;color:var(--ink)}
+.btn{display:inline-block;padding:12px 28px;border-radius:999px;background:var(--head);color:var(--night);font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none}
+.btn:hover{background:var(--ink)}
+
+/* contacts */
+.center{text-align:center;margin-bottom:48px}
+.center h2{font-family:var(--display);font-size:clamp(38px,6.5vw,66px);font-weight:800;color:var(--head);text-transform:uppercase}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px;max-width:640px;margin-inline:auto}
+.card{display:grid;gap:14px;justify-items:center;text-align:center;text-decoration:none}
+.card .ph{width:120px;height:120px;border-radius:50%;padding:0;color:var(--soft)}
+.card .ph .q{width:40px;height:40px;font-size:20px;background:var(--ink);color:var(--night)}
+.card .ico{width:120px;height:120px;border-radius:50%;display:grid;place-items:center;background:var(--head);transition:transform .25s,background .25s}
+.card .ico svg{width:48px;height:48px;fill:var(--night)}
+.card:hover .ico{transform:scale(1.08);background:var(--ink)}
+.card .ico.dc{background:#5865F2}
+.card .ico.dc img{width:56px;height:auto}
+.card .ico.yt{background:#ff0000}
+.card .ico.yt img{width:96px;height:auto}
+.card:hover .ico.dc{background:#6b76ff}
+.card:hover .ico.yt{background:#ff2b2b}
+.card h3{font-family:var(--display);font-size:18px;font-weight:800;text-transform:uppercase;letter-spacing:.03em}
+.card p{margin:0;color:var(--soft);max-width:30ch}
+
+footer .wrap{padding-block:28px;color:var(--soft);font-size:14px;border-top:1px solid #3a3442}
+
+/* top bar: transparent over the banner, solid once you scroll */
+.top{position:fixed;top:0;left:0;right:0;z-index:6;transition:background .3s,box-shadow .3s}
+.top .bar{max-width:1100px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(64px,calc(env(safe-area-inset-right,0px) + 64px));padding-block:calc(14px + env(safe-area-inset-top,0px)) 14px;display:flex;align-items:center;gap:24px}
+.top .brand{font-weight:800;letter-spacing:.06em;text-decoration:none;color:var(--dark-ink);transition:color .3s}
+.top nav{display:flex;gap:22px;margin-left:auto;flex-wrap:wrap}
+.top nav a{text-decoration:none;font-weight:700;font-size:14px;letter-spacing:.04em;color:var(--dark-ink);opacity:.75;transition:color .3s,opacity .2s}
+.top nav a:hover{opacity:1}
+.top.solid{background:color-mix(in srgb,var(--night) 92%,transparent);box-shadow:0 6px 24px rgba(0,0,0,.35)}
+.top.solid .brand,.top.solid nav a{color:var(--ink)}
+.hero .wrap{padding-top:90px}
+/* hero calls to action */
+.ctas{flex-basis:100%;display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:-10px}
+.btn.ghost{background:transparent;color:var(--dark-ink);border:2px solid var(--dark-ink)}
+.btn.ghost:hover{background:var(--dark-ink);color:var(--paper)}
+/* stats counters */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;text-align:center}
+.stat b{display:block;font-size:clamp(36px,6vw,60px);font-weight:800;color:var(--head);font-variant-numeric:tabular-nums;line-height:1}
+.stat span{display:block;margin-top:10px;color:var(--soft);font-size:14px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+/* fan quotes */
+.quotes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
+.quote{margin:0;display:grid;gap:14px;padding-left:20px;border-left:3px solid var(--head)}
+.quote p{margin:0;font-size:17px;font-style:italic}
+.quote cite{font-style:normal;color:var(--soft);font-size:14px;font-weight:700;display:flex;gap:8px;align-items:center}
+.quote .q{width:22px;height:22px;font-size:12px;background:var(--ink);color:var(--night)}
+/* play-on badges */
+.badges{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:44px}
+.badge{display:flex;align-items:center;gap:10px;padding:10px 18px;border-radius:12px;border:1px solid #3a3442;text-decoration:none;font-weight:700;font-size:14px}
+.badge:hover{border-color:var(--head)}
+.badge .q{width:24px;height:24px;font-size:12px;background:var(--ink);color:var(--night)}
+/* footer columns */
+.foot{display:grid;grid-template-columns:1.4fr repeat(3,minmax(0,1fr));gap:32px;padding-block:56px 32px}
+.foot h4{margin:0 0 12px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--head)}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.foot a{text-decoration:none;color:var(--soft)}
+.foot a:hover{color:var(--ink)}
+.foot .brandline{font-weight:800;font-size:22px;letter-spacing:.04em}
+.foot p{margin:8px 0 0;color:var(--soft);max-width:30ch}
+.copy{padding-block:18px 28px;color:var(--soft);font-size:13px;border-top:1px solid #3a3442}
+@media (max-width:760px){
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .quotes{grid-template-columns:1fr}
+  .foot{grid-template-columns:1fr 1fr}
+  .top nav{display:none}
+  .split{grid-template-columns:1fr;gap:36px}
+  .split .ph{max-width:300px;justify-self:center}
+  .split .art{width:100%;max-width:380px;justify-self:center}
+  .split.rev .ph,.split.rev .art{order:-1}
+  .cards{grid-template-columns:1fr}
+  section{padding-block:64px}
+  .hero .wrap{padding-block:32px 72px;flex-direction:column;text-align:center}
+  .wrap{padding-right:max(56px,calc(env(safe-area-inset-right,0px) + 56px))}
+}
+/* scroll reveal: only elements below the fold start hidden; JS adds .pre then removes it */
+[data-from]{transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}
+[data-from].pre{opacity:0}
+[data-from="left"].pre{transform:translateX(-90px)}
+[data-from="right"].pre{transform:translateX(90px)}
+[data-from="up"].pre{transform:translateY(60px)}
+/* impact: drops in big (ease-in), lands, recoils a little to the left and smaller, settles back (ease-out) */
+[data-from="impact"]{transition:none;transform-origin:50% 60%}
+[data-from="impact"].pre{opacity:0;transform:scale(1.7) rotate(20deg)}
+[data-from="impact"].hit{animation:impact .6s both}
+@keyframes impact{
+  0%{opacity:0;transform:scale(1.7) rotate(20deg);animation-timing-function:cubic-bezier(.55,0,1,.45)}
+  12%{opacity:.25;transform:scale(1.62) rotate(19deg);animation-timing-function:cubic-bezier(.55,0,1,.45)}
+  42%{opacity:1;transform:scale(1) rotate(7deg);animation-timing-function:cubic-bezier(0,.55,.45,1)}
+  72%{transform:scale(1) rotate(-2deg);animation-timing-function:cubic-bezier(.3,0,.3,1)}
+  100%{opacity:1;transform:none}
+}
+body{overflow-x:hidden}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}[data-from]{transition:none}[data-from].pre{opacity:1;transform:none}[data-from="impact"].hit{animation:none}}
+</style>
+
+<div id="mq" aria-hidden="true"></div>
+
+<header class="top" id="topbar">
+  <div class="bar">
+    <a class="brand" href="#top">WERMYLE</a>
+    <nav aria-label="Main">
+      <a href="#about">About</a>
+      <a href="#projects">Mods</a>
+      <a href="#stats">Numbers</a>
+      <a href="#contacts">Socials</a>
+    </nav>
+  </div>
+</header>
+
+<nav class="rail" aria-label="Social links">
+  <a href="#" title="Social 1">?</a>
+  <a href="#" title="Social 2">?</a>
+  <a href="#" title="Social 3">?</a>
+  <a href="#" title="Social 4">?</a>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <h1 class="sr">Welcome, I'm wermyle</h1>
+    <img class="banner" src="banner.png" alt="Welcome, I'm wermyle">
+    <div class="ctas">
+      <a class="btn" href="#">Play my mods</a>
+      <a class="btn ghost" href="#">Watch on YouTube</a>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap split">
+    <img class="art" src="about.png" alt="wermyle character">
+    <div class="text">
+      <h2>ABOUT ME</h2>
+      <p>A few lines about you: who you are, what you make and what you love to create.</p>
+      <a class="btn" href="#contacts">Find me</a>
+    </div>
+  </div>
+</section>
+
+<section id="projects" class="alt">
+  <div class="wrap split rev">
+    <div class="text">
+      <h2>Mods</h2>
+      <p>A short description of your mods: their sound, their style and what makes them different.</p>
+      <a class="btn" href="#">See all mods</a>
+    </div>
+    <div class="ph"><span class="q">?</span>unnamed<small>Mods cover</small></div>
+  </div>
+</section>
+
+<section id="stats" class="alt">
+  <div class="wrap">
+    <div class="center"><h2>In numbers</h2></div>
+    <div class="stats">
+      <div class="stat"><b data-count="4">0</b><span>Mods released</span></div>
+      <div class="stat"><b data-count="1200" data-suffix="+">0</b><span>Subscribers</span></div>
+      <div class="stat"><b data-count="85000" data-suffix="+">0</b><span>Mix plays</span></div>
+      <div class="stat"><b data-count="320">0</b><span>Discord members</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="quotes">
+  <div class="wrap">
+    <div class="center"><h2>What people say</h2></div>
+    <div class="quotes">
+      <figure class="quote"><p>A short review or comment from a player goes here.</p><cite><span class="q">?</span>Name, where it was posted</cite></figure>
+      <figure class="quote"><p>A second comment about your mods goes here.</p><cite><span class="q">?</span>Name, where it was posted</cite></figure>
+      <figure class="quote"><p>A third comment, for example from a YouTube video.</p><cite><span class="q">?</span>Name, where it was posted</cite></figure>
+    </div>
+  </div>
+</section>
+
+<section id="contacts">
+  <div class="wrap">
+    <div class="center"><h2>Socials</h2></div>
+    <div class="cards">
+      <a class="card" href="#"><span class="ico yt"><img src="yt-icon.png" alt="YouTube"></span><h3>YouTube</h3><p>Watch my Incredibox mods in action, with gameplay, showcases and sneak peeks of what's coming next!</p></a>
+      <a class="card" href="#"><span class="ico dc"><img src="discord.svg" alt="Discord"></span><h3>Discord</h3><p>Hang out with other Incredibox fans, post your art, talk about mods and help test new ones!</p></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div><div class="brandline">WERMYLE</div><p>Music mods, animations and new sounds.</p></div>
+    <div><h4>Mods</h4><ul><li><a href="#projects">All mods</a></li><li><a href="#">Latest release</a></li><li><a href="#">Bonuses</a></li></ul></div>
+    <div><h4>Community</h4><ul><li><a href="#">YouTube</a></li><li><a href="#">Discord</a></li></ul></div>
+    <div><h4>More</h4><ul><li><a href="#about">About me</a></li><li><a href="#">Wallpapers</a></li><li><a href="#">Contact</a></li></ul></div>
+  </div>
+  <div class="wrap copy">© 2026 wermyle</div>
+</footer>
+
+<script>
+/* build the WERMYLE rows: enough copies per row to cover twice the width, so the loop is seamless */
+(function(){
+  const mq=document.getElementById('mq');
+  function build(){
+    mq.innerHTML='';
+    const rows=Math.max(5,Math.round(innerHeight/130));
+    const per=Math.max(6,Math.ceil(innerWidth/300)*2);
+    for(let r=0;r<rows;r++){
+      const row=document.createElement('div');row.className='row';
+      row.style.animationDelay=(-r*7)+'s';
+      for(let i=0;i<per*2;i++){const sp=document.createElement('span');sp.textContent='WERMYLE';row.appendChild(sp)}
+      mq.appendChild(row);
+    }
+  }
+  build();let t;addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(build,200)});
+})();
+
+(function(){
+  const set=(sel,dir)=>document.querySelectorAll(sel).forEach(el=>el.dataset.from=dir);
+  set('.hero .banner','up');
+  set('#about .art','impact');
+  set('#about .text','right');
+  set('#projects .text','left');
+  set('#projects .ph','right');
+  set('.center','up');
+  set('.ctas','up');
+  document.querySelectorAll('.stat,.quote').forEach((el,i,all)=>{el.dataset.from='up';el.style.setProperty('--d',((i%4)*0.12)+'s')});
+  document.querySelectorAll('.card').forEach((el,i)=>{el.dataset.from='up';el.style.setProperty('--d',(i*0.15)+'s')});
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches||!('IntersectionObserver' in window))return;
+  const els=[...document.querySelectorAll('[data-from]')];
+  const vh=innerHeight;
+  // slide in when entering the screen, slide back out to its side when leaving (both scroll directions)
+  // watch each element's parent, which never moves or scales, so an element's own animation
+  // (e.g. the impact zoom) can't push it in and out of view and retrigger itself
+  const groups=new Map();
+  els.forEach(el=>{
+    const p=el.parentElement;
+    if(!groups.has(p))groups.set(p,[]);
+    groups.get(p).push(el);
+    const r=p.getBoundingClientRect();
+    if(r.top>=vh*0.9)el.classList.add('pre'); // below the fold starts hidden; visible ones stay shown
+  });
+  const io=new IntersectionObserver(es=>es.forEach(e=>{
+    (groups.get(e.target)||[]).forEach(el=>{
+      const on=e.isIntersecting;
+      if(el.dataset.from==='impact'){
+        if(on&&!el.classList.contains('hit')){el.classList.remove('pre');el.classList.add('hit')}
+        else if(!on){el.classList.remove('hit');el.classList.add('pre')}
+      }else el.classList.toggle('pre',!on);
+    });
+  }),{threshold:.1});
+  groups.forEach((_,p)=>io.observe(p));
+  // hero plays once on load
+  document.querySelectorAll('.hero [data-from]').forEach(el=>{
+    el.classList.add('pre');
+    requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.remove('pre')));
+  });
+})();
+
+/* top bar turns solid after the banner; counters run when they come into view */
+(function(){
+  const top=document.getElementById('topbar'),hero=document.getElementById('top');
+  const onScroll=()=>top.classList.toggle('solid',scrollY>hero.offsetHeight-80);
+  addEventListener('scroll',onScroll,{passive:true});onScroll();
+  const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fmt=n=>n.toLocaleString('en-US');
+  const io=new IntersectionObserver(es=>es.forEach(e=>{
+    if(!e.isIntersecting)return;io.unobserve(e.target);
+    const el=e.target,end=+el.dataset.count,suf=el.dataset.suffix||'';
+    if(still){el.textContent=fmt(end)+suf;return}
+    const t0=performance.now(),dur=1600;
+    (function step(t){const k=Math.min(1,(t-t0)/dur),v=Math.round(end*(1-Math.pow(1-k,3)));el.textContent=fmt(v)+(k===1?suf:'');if(k<1)requestAnimationFrame(step)})(t0);
+  }),{threshold:.6});
+  document.querySelectorAll('[data-count]').forEach(el=>io.observe(el));
+})();
+</script>
