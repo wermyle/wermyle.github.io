@@ -202,6 +202,38 @@ body{overflow-x:hidden}
 .feed-empty{display:grid;justify-items:center;gap:8px;text-align:center;padding:48px 20px;border:2px dashed #3a3442;border-radius:20px;color:var(--soft)}
 .feed-empty b{color:var(--ink);font-size:20px}
 @media (max-width:760px){.feed{grid-template-columns:1fr}.feed .item:first-child{grid-column:auto;grid-row:auto}}
+/* community hub: tabs with live site chat and discord */
+.hub{max-width:820px;margin:0 auto;background:var(--night2);border:1px solid #3a3442;border-radius:24px;overflow:hidden}
+.tabs{display:flex;border-bottom:1px solid #3a3442}
+.tab{flex:1;font:inherit;font-weight:800;font-size:14px;letter-spacing:.1em;text-transform:uppercase;padding:18px 12px;background:transparent;border:0;color:var(--soft);cursor:pointer;position:relative;display:flex;align-items:center;justify-content:center;gap:8px}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink)}
+.tab[aria-selected="true"]::after{content:"";position:absolute;left:20%;right:20%;bottom:-1px;height:3px;border-radius:3px;background:var(--head)}
+#tab-dc[aria-selected="true"]::after{background:#5865F2}
+.live{width:8px;height:8px;border-radius:50%;background:#3fbf6e;box-shadow:0 0 0 0 rgba(63,191,110,.6);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(63,191,110,0)}100%{box-shadow:0 0 0 0 rgba(63,191,110,0)}}
+.panel{padding:20px}
+.chat-log{height:360px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding:6px 6px 6px 2px;overscroll-behavior:contain}
+.msg{display:grid;gap:3px;max-width:85%;min-width:0}
+.msg .who{font-size:13px;font-weight:800;color:var(--head)}
+.msg .who time{font-weight:500;color:var(--soft);margin-left:6px;font-variant-numeric:tabular-nums}
+.msg p{margin:0;background:var(--night);border:1px solid #3a3442;border-radius:4px 16px 16px 16px;padding:9px 13px;overflow-wrap:anywhere;white-space:pre-line}
+.msg.me{justify-self:end;align-self:flex-end;text-align:right}
+.msg.me p{background:color-mix(in srgb,var(--head) 22%,var(--night));border-color:color-mix(in srgb,var(--head) 40%,transparent);border-radius:16px 4px 16px 16px;text-align:left}
+.chat-empty{margin:auto;color:var(--soft);text-align:center}
+.chat-form{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr) auto;gap:10px;margin-top:14px}
+.chat-form input{font:inherit;font-size:16px;color:var(--ink);background:var(--night);border:1px solid #4a4354;border-radius:999px;padding:12px 16px;min-width:0}
+.chat-form input:focus{outline:none;border-color:var(--head);box-shadow:0 0 0 3px color-mix(in srgb,var(--head) 30%,transparent)}
+.chat-form .btn:disabled{opacity:.5;cursor:not-allowed}
+.chat-status{margin:8px 0 0;min-height:1.3em;font-size:14px;font-weight:700}
+.chat-status.err{color:#ff8fa3}
+.chat-rules{margin:2px 0 0;font-size:13px;color:var(--soft)}
+.vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.dc-box{min-height:420px;display:grid;place-items:center;align-content:center;gap:10px;text-align:center;color:var(--soft)}
+.dc-box b{color:var(--ink);font-size:20px}
+.dc-logo{width:110px;height:110px;padding:22px;box-sizing:border-box;object-fit:contain;border-radius:28px;background:#5865F2;display:block}
+.dc-frame{width:100%;height:500px;border:0;border-radius:14px;display:block}
+@media (max-width:760px){.chat-form{grid-template-columns:1fr auto}.chat-form #chat-name{grid-column:1/-1}.chat-log{height:320px}.panel{padding:14px}}
 /* ---- mobile ---- */
 .burger{display:none;margin-left:auto;width:42px;height:42px;border-radius:12px;border:0;background:transparent;color:inherit;cursor:pointer;position:relative}
 .burger span{position:absolute;left:10px;right:10px;height:2px;border-radius:2px;background:currentColor;transition:transform .25s,opacity .2s}
@@ -287,7 +319,7 @@ body{overflow-x:hidden}
     <img class="art" src="about.png" alt="wermyle character">
     <div class="text">
       <h2>ABOUT ME</h2>
-      <p>Hey, I love doing absolutely nothing, and I’m proud of it! How about you?</p>
+      <p>A few lines about you: who you are, what you make and what you love to create.</p>
       <a class="btn" href="#contacts">Find me</a>
     </div>
   </div>
@@ -297,7 +329,7 @@ body{overflow-x:hidden}
   <div class="wrap split rev">
     <div class="text">
       <h2>Mods</h2>
-      <p>Dive into my NOT-YET-RELEASED mods!</p>
+      <p>A short description of your mods: their sound, their style and what makes them different.</p>
       <a class="btn" href="mods.html">See all mods</a>
     </div>
     <picture class="art">
@@ -322,11 +354,36 @@ body{overflow-x:hidden}
 
 <section id="quotes">
   <div class="wrap">
-    <div class="center"><h2>What people say</h2></div>
-    <div class="quotes">
-      <figure class="quote"><p>A short review or comment from a player goes here.</p><cite><span class="q">?</span>Name, where it was posted</cite></figure>
-      <figure class="quote"><p>A second comment about your mods goes here.</p><cite><span class="q">?</span>Name, where it was posted</cite></figure>
-      <figure class="quote"><p>A third comment, for example from a YouTube video.</p><cite><span class="q">?</span>Name, where it was posted</cite></figure>
+    <div class="center"><h2>Community</h2></div>
+    <div class="hub">
+      <div class="tabs" role="tablist" aria-label="Chat">
+        <button class="tab" role="tab" id="tab-site" aria-selected="true" aria-controls="panel-site">Site Chat <span class="live" id="chat-live" hidden></span></button>
+        <button class="tab" role="tab" id="tab-dc" aria-selected="false" aria-controls="panel-dc" tabindex="-1">Discord Chat</button>
+      </div>
+
+      <div class="panel" role="tabpanel" id="panel-site" aria-labelledby="tab-site">
+        <div class="chat-log" id="chat-log" aria-live="polite">
+          <p class="chat-empty" id="chat-empty">The chat will open soon.</p>
+        </div>
+        <form class="chat-form" id="chat-form" novalidate>
+          <label class="vh" for="chat-name">Nickname</label>
+          <input id="chat-name" maxlength="24" placeholder="Nickname" autocomplete="nickname" required>
+          <label class="vh" for="chat-msg">Message</label>
+          <input id="chat-msg" maxlength="300" placeholder="Say hi to everyone…" autocomplete="off" required>
+          <input class="vh" id="chat-web" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button class="btn" type="submit" id="chat-send">Send</button>
+        </form>
+        <p class="chat-status" id="chat-status" role="status"></p>
+        <p class="chat-rules">Be kind. No links, no swearing, no spam. Messages that break the rules are removed.</p>
+      </div>
+
+      <div class="panel" role="tabpanel" id="panel-dc" aria-labelledby="tab-dc" hidden>
+        <div class="dc-box" id="dc-box">
+          <img src="discord.svg" alt="" class="dc-logo">
+          <b>Discord server coming soon</b>
+          <span>Mod news, sneak peeks and voice chats with other fans.</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -351,6 +408,7 @@ body{overflow-x:hidden}
   <div class="wrap copy">© 2026 wermyle</div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.1/dist/umd/supabase.js"></script>
 <script>
 /* build the WERMYLE rows: enough copies per row to cover twice the width, so the loop is seamless */
 (function(){
@@ -378,7 +436,7 @@ body{overflow-x:hidden}
   set('#projects .art','right');
   set('.center','up');
   set('.ctas','up');
-  document.querySelectorAll('.stat,.quote').forEach((el,i,all)=>{el.dataset.from='up';el.style.setProperty('--d',((i%4)*0.12)+'s')});
+  document.querySelectorAll('.stat,.hub').forEach((el,i,all)=>{el.dataset.from='up';el.style.setProperty('--d',((i%4)*0.12)+'s')});
   document.querySelectorAll('.card').forEach((el,i)=>{el.dataset.from='up';el.style.setProperty('--d',(i*0.15)+'s')});
   if(matchMedia('(prefers-reduced-motion: reduce)').matches||!('IntersectionObserver' in window))return;
   const els=[...document.querySelectorAll('[data-from]')];
@@ -460,6 +518,72 @@ body{overflow-x:hidden}
     box.hidden=false;empty.hidden=true;
     if(data.updated)upd.textContent='Updated '+ago(data.updated);
   }).catch(()=>{});
+})();
+/* community hub: tabs, live site chat (Supabase Realtime), discord widget */
+(function(){
+  const SUPABASE_URL='https://jhktsfthhmgshvzwbjmn.supabase.co';
+  const SUPABASE_KEY='sb_publishable_av74U9zcHh30VMarvBjZ-g_rasiFST_'; // publishable key, public by design
+  const DISCORD_SERVER_ID='';   // Server Settings -> Widget -> Server ID
+  const DISCORD_INVITE='';      // e.g. https://discord.gg/xxxxxx
+
+  // tabs
+  const tabs=[...document.querySelectorAll('.tab')];
+  function select(t){tabs.forEach(x=>{const on=x===t;x.setAttribute('aria-selected',on);x.tabIndex=on?0:-1;document.getElementById(x.getAttribute('aria-controls')).hidden=!on})}
+  tabs.forEach((t,i)=>{t.addEventListener('click',()=>select(t));t.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const n=tabs[(i+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length];select(n);n.focus()}})});
+
+  // discord
+  if(DISCORD_SERVER_ID){
+    const box=document.getElementById('dc-box');
+    box.outerHTML=`<iframe class="dc-frame" title="Discord server" loading="lazy" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts" src="https://discord.com/widget?id=${encodeURIComponent(DISCORD_SERVER_ID)}&theme=dark"></iframe>`+
+      (DISCORD_INVITE?`<p style="text-align:center;margin:14px 0 0"><a class="btn" href="${DISCORD_INVITE}" target="_blank" rel="noopener">Join the server</a></p>`:'');
+  }
+
+  // site chat
+  const log=document.getElementById('chat-log'),empty=document.getElementById('chat-empty'),form=document.getElementById('chat-form');
+  const nameEl=document.getElementById('chat-name'),msgEl=document.getElementById('chat-msg'),send=document.getElementById('chat-send');
+  const status=document.getElementById('chat-status'),live=document.getElementById('chat-live');
+  const say=(t,err)=>{status.textContent=t;status.className='chat-status'+(err?' err':'')};
+  try{nameEl.value=localStorage.getItem('chat-name')||''}catch(_){}
+  if(!SUPABASE_URL||!SUPABASE_KEY||!window.supabase){send.disabled=true;nameEl.disabled=msgEl.disabled=true;if(SUPABASE_URL)empty.textContent='The chat could not load. Try refreshing the page.';return}
+  const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:false}});
+  const esc=t=>String(t||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const hm=d=>new Date(d).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  const BAD=/(https?:\/\/|www\.|\.(com|net|org|ru|gg|io|xyz)\b|discord\.gg|t\.me\/)/i;
+  const shown=new Set();
+  function me(){try{return localStorage.getItem('chat-name')||''}catch(_){return ''}}
+  function add(m){
+    if(shown.has(m.id))return;shown.add(m.id);
+    empty.hidden=true;
+    const near=log.scrollHeight-log.scrollTop-log.clientHeight<80;
+    const el=document.createElement('div');el.className='msg'+(m.name===me()?' me':'');el.dataset.id=m.id;
+    el.innerHTML=`<span class="who">${esc(m.name)}<time>${hm(m.created_at)}</time></span><p>${esc(m.message)}</p>`;
+    log.appendChild(el);
+    while(log.querySelectorAll('.msg').length>80)log.querySelector('.msg').remove();
+    if(near)log.scrollTop=log.scrollHeight;
+  }
+  empty.textContent='No messages yet. Start the conversation!';
+  db.from('chat_messages').select('id,name,message,created_at').order('id',{ascending:false}).limit(50)
+    .then(({data})=>{(data||[]).reverse().forEach(add);log.scrollTop=log.scrollHeight});
+  db.channel('site-chat')
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'chat_messages'},p=>add(p.new))
+    .on('postgres_changes',{event:'DELETE',schema:'public',table:'chat_messages'},p=>{const n=log.querySelector(`.msg[data-id="${p.old.id}"]`);if(n)n.remove()})
+    .subscribe(st=>{live.hidden=st!=='SUBSCRIBED'});
+  let last=0;
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();
+    if(document.getElementById('chat-web').value)return;
+    const name=nameEl.value.trim(),message=msgEl.value.trim();
+    if(!name)return say('Pick a nickname first.',1);
+    if(!message)return;
+    if(BAD.test(message)||BAD.test(name))return say('Links are not allowed in the chat.',1);
+    if(Date.now()-last<5000)return say('Slow down a little.',1);
+    last=Date.now();send.disabled=true;say('');
+    try{localStorage.setItem('chat-name',name)}catch(_){}
+    const {error}=await db.from('chat_messages').insert({name,message});
+    send.disabled=false;
+    if(error){say(/busy/i.test(error.message)?'The chat is busy, try again in a minute.':/Duplicate/i.test(error.message)?'You already sent that.':/chat_clean/i.test(error.message)?'That message breaks the chat rules.':'Could not send, try again.',1);return}
+    msgEl.value='';msgEl.focus();
+  });
 })();
 </script>
 </body>
