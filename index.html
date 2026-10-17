@@ -581,7 +581,7 @@ body{overflow-x:hidden}
     try{localStorage.setItem('chat-name',name)}catch(_){}
     const {error}=await db.from('chat_messages').insert({name,message});
     send.disabled=false;
-    if(error){say(/busy/i.test(error.message)?'The chat is busy, try again in a minute.':/Duplicate/i.test(error.message)?'You already sent that.':/chat_clean/i.test(error.message)?'That message breaks the chat rules.':'Could not send, try again.',1);return}
+    if(error){const m=error.message||'';say(/paused/i.test(m)?'The chat is paused right now.':/not allowed/i.test(m)?'You can\'t send messages in this chat.':/busy/i.test(m)?'Slow down, try again in a minute.':/Duplicate/i.test(m)?'You already sent that.':/chat_clean|check/i.test(m)?'That message breaks the chat rules.':'Could not send, try again.',1);return}
     msgEl.value='';msgEl.focus();
   });
 })();
