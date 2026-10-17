@@ -1,5 +1,9 @@
-<title>Unnamed Template</title>
-<meta name="claude:viewport-fit-sides" content="cover">
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>wermyle</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,400;0,500;0,700;0,800;1,800&display=swap">
 <style>
 /* Layout: light banner fading into a lavender band with centred logo+title → dark split sections (big image | centred text) → contacts → fixed vertical icon rail on the right */
@@ -18,7 +22,9 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:var(--night);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6}
+body{margin:0;background:var(--night);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6}
+img{max-width:100%}
+[hidden]{display:none!important}
 a{color:inherit}
 .wrap{max-width:1100px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(64px,calc(env(safe-area-inset-right,0px) + 64px))}
 h1,h2,h3{margin:0;line-height:1.1;text-wrap:balance}
@@ -42,6 +48,10 @@ h1,h2,h3{margin:0;line-height:1.1;text-wrap:balance}
 .rail{position:fixed;right:calc(14px + env(safe-area-inset-right,0px));top:50%;transform:translateY(-50%);display:grid;gap:16px;z-index:5}
 .rail a{width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--night);display:grid;place-items:center;text-decoration:none;font-weight:800;font-size:14px;box-shadow:0 2px 10px rgba(0,0,0,.25)}
 .rail a:hover{background:var(--head)}
+.rail a.r-yt{background:#ff0000}
+.rail a.r-dc{background:#5865F2}
+.rail a img{width:58%;height:auto}
+.rail a.r-yt:hover,.rail a.r-dc:hover{filter:brightness(1.15)}
 
 /* dark split sections */
 section{padding-block:100px}
@@ -161,13 +171,49 @@ footer .wrap{padding-block:28px;color:var(--soft);font-size:14px;border-top:1px 
 }
 body{overflow-x:hidden}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}[data-from]{transition:none}[data-from].pre{opacity:1;transform:none}[data-from="impact"].hit{animation:none}}
-</style>
 
+/* ---- mobile ---- */
+.burger{display:none;margin-left:auto;width:42px;height:42px;border-radius:12px;border:0;background:transparent;color:inherit;cursor:pointer;position:relative}
+.burger span{position:absolute;left:10px;right:10px;height:2px;border-radius:2px;background:currentColor;transition:transform .25s,opacity .2s}
+.burger span:nth-child(1){top:14px}.burger span:nth-child(2){top:20px}.burger span:nth-child(3){top:26px}
+.top.open .burger span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.top.open .burger span:nth-child(2){opacity:0}
+.top.open .burger span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+@media (max-width:760px){
+  .wrap,.top .bar{padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .top .brand{color:var(--dark-ink)}
+  .burger{display:block;color:var(--dark-ink)}
+  .top.solid .burger,.top.open .burger{color:var(--ink)}
+  .top.open{background:var(--night);box-shadow:0 10px 30px rgba(0,0,0,.45)}
+  .top.open .brand{color:var(--ink)}
+  .top nav{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;gap:0;margin:0;background:var(--night);padding:6px max(16px,env(safe-area-inset-right,0px)) 14px max(16px,env(safe-area-inset-left,0px));border-top:1px solid #3a3442}
+  .top.open nav{display:flex}
+  .top nav a{color:var(--ink);opacity:1;font-size:17px;padding:14px 0;border-bottom:1px solid #2e2934}
+  .top nav a:last-child{border-bottom:0}
+  /* social icons: small floating pill at the bottom instead of a side column */
+  .rail{top:auto;transform:none;bottom:calc(14px + env(safe-area-inset-bottom,0px));right:calc(14px + env(safe-area-inset-right,0px));display:flex;gap:10px;padding:8px;border-radius:999px;background:color-mix(in srgb,var(--night) 85%,transparent);box-shadow:0 6px 20px rgba(0,0,0,.4)}
+  .rail a{width:38px;height:38px}
+  .hero .wrap{padding-top:76px}
+  .ctas{flex-direction:column;align-items:stretch;padding-inline:10px}
+  .ctas .btn{text-align:center}
+  .text h2,.center h2{font-size:clamp(32px,9vw,44px)}
+  .stat b{font-size:clamp(30px,9vw,42px)}
+  .foot{grid-template-columns:1fr 1fr;gap:24px}
+  .foot>div:first-child{grid-column:1/-1}
+  #mq .row{font-size:clamp(44px,9vh,90px)}
+  .entry .info{padding-right:max(20px,env(safe-area-inset-right,0px))}
+  .mhero .wrap{padding-top:92px}
+  .entry .actions a{flex:1;text-align:center}
+}
+</style>
+</head>
+<body>
 <div id="mq" aria-hidden="true"></div>
 
 <header class="top" id="topbar">
   <div class="bar">
     <a class="brand" href="#top">WERMYLE</a>
+    <button class="burger" type="button" aria-label="Menu" aria-expanded="false" id="burger"><span></span><span></span><span></span></button>
     <nav aria-label="Main">
       <a href="#about">About</a>
       <a href="#projects">Mods</a>
@@ -178,10 +224,8 @@ body{overflow-x:hidden}
 </header>
 
 <nav class="rail" aria-label="Social links">
-  <a href="#" title="Social 1">?</a>
-  <a href="#" title="Social 2">?</a>
-  <a href="#" title="Social 3">?</a>
-  <a href="#" title="Social 4">?</a>
+  <a class="r-yt" href="https://www.youtube.com/@wermyle" target="_blank" rel="noopener" title="YouTube"><img src="yt-icon.png" alt="YouTube"></a>
+  <a class="r-dc" href="#" title="Discord (link coming soon)"><img src="discord.svg" alt="Discord"></a>
 </nav>
 
 <header class="hero" id="top">
@@ -189,8 +233,8 @@ body{overflow-x:hidden}
     <h1 class="sr">Welcome, I'm wermyle</h1>
     <img class="banner" src="banner.png" alt="Welcome, I'm wermyle">
     <div class="ctas">
-      <a class="btn" href="#">Play my mods</a>
-      <a class="btn ghost" href="#">Watch on YouTube</a>
+      <a class="btn" href="mods.html">Play my mods</a>
+      <a class="btn ghost" href="https://www.youtube.com/@wermyle" target="_blank" rel="noopener">Watch on YouTube</a>
     </div>
   </div>
 </header>
@@ -211,7 +255,7 @@ body{overflow-x:hidden}
     <div class="text">
       <h2>Mods</h2>
       <p>A short description of your mods: their sound, their style and what makes them different.</p>
-      <a class="btn" href="#">See all mods</a>
+      <a class="btn" href="mods.html">See all mods</a>
     </div>
     <div class="ph"><span class="q">?</span>unnamed<small>Mods cover</small></div>
   </div>
@@ -244,7 +288,7 @@ body{overflow-x:hidden}
   <div class="wrap">
     <div class="center"><h2>Socials</h2></div>
     <div class="cards">
-      <a class="card" href="#"><span class="ico yt"><img src="yt-icon.png" alt="YouTube"></span><h3>YouTube</h3><p>Watch my Incredibox mods in action, with gameplay, showcases and sneak peeks of what's coming next!</p></a>
+      <a class="card" href="https://www.youtube.com/@wermyle" target="_blank" rel="noopener"><span class="ico yt"><img src="yt-icon.png" alt="YouTube"></span><h3>YouTube</h3><p>Watch my Incredibox mods in action, with gameplay, showcases and sneak peeks of what's coming next!</p></a>
       <a class="card" href="#"><span class="ico dc"><img src="discord.svg" alt="Discord"></span><h3>Discord</h3><p>Hang out with other Incredibox fans, post your art, talk about mods and help test new ones!</p></a>
     </div>
   </div>
@@ -253,9 +297,9 @@ body{overflow-x:hidden}
 <footer>
   <div class="wrap foot">
     <div><div class="brandline">WERMYLE</div><p>Music mods, animations and new sounds.</p></div>
-    <div><h4>Mods</h4><ul><li><a href="#projects">All mods</a></li><li><a href="#">Latest release</a></li><li><a href="#">Bonuses</a></li></ul></div>
-    <div><h4>Community</h4><ul><li><a href="#">YouTube</a></li><li><a href="#">Discord</a></li></ul></div>
-    <div><h4>More</h4><ul><li><a href="#about">About me</a></li><li><a href="#">Wallpapers</a></li><li><a href="#">Contact</a></li></ul></div>
+    <div><h4>Mods</h4><ul><li><a href="mods.html">All mods</a></li><li><a href="#projects">Featured</a></li></ul></div>
+    <div><h4>Community</h4><ul><li><a href="https://www.youtube.com/@wermyle" target="_blank" rel="noopener">YouTube</a></li><li><a href="#">Discord (soon)</a></li></ul></div>
+    <div><h4>More</h4><ul><li><a href="#about">About me</a></li><li><a href="#contacts">Socials</a></li></ul></div>
   </div>
   <div class="wrap copy">© 2026 wermyle</div>
 </footer>
@@ -336,4 +380,12 @@ body{overflow-x:hidden}
   }),{threshold:.6});
   document.querySelectorAll('[data-count]').forEach(el=>io.observe(el));
 })();
+/* mobile menu */
+(function(){
+  const top=document.getElementById('topbar'),b=top&&top.querySelector('.burger');if(!b)return;
+  b.addEventListener('click',()=>{const o=top.classList.toggle('open');b.setAttribute('aria-expanded',o)});
+  top.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',()=>{top.classList.remove('open');b.setAttribute('aria-expanded',false)}));
+})();
 </script>
+</body>
+</html>
