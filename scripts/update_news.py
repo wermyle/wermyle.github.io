@@ -116,7 +116,21 @@ def discord_items():
     return items
 
 
+# Keeps the free Supabase project (site chat) awake: free projects pause after a week without requests.
+SUPABASE_URL = "https://jhktsfthhmgshvzwbjmn.supabase.co"
+SUPABASE_KEY = "sb_publishable_av74U9zcHh30VMarvBjZ-g_rasiFST_"  # publishable key, public by design
+
+
+def ping_supabase():
+    get(f"{SUPABASE_URL}/rest/v1/chat_messages?select=id&limit=1",
+        {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"})
+
+
 def main():
+    try:
+        ping_supabase()
+    except Exception as exc:
+        print(f"supabase ping failed: {exc}", file=sys.stderr)
     old = {}
     if os.path.exists(OUT):
         try:
