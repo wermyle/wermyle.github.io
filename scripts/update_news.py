@@ -1,0 +1,150 @@
+"""Builds news.json for the site: latest YouTube uploads (+ optional Discord announcements).
+
+Runs on GitHub Actions (see .github/workflows/news.yml). Uses only the Python standard library.
+
+YouTube: read from the channel's public RSS feed, no API key needed.
+YouTube stats (optional): add a repository secret YOUTUBE_API_KEY (free key from Google Cloud,
+  YouTube Data API v3). Then subscribers, total views and video count are refreshed every run.
+
+Discord (optional): set these repository secrets to turn it on
+  DISCORD_TOKEN       bot token (Bot must be in your server and able to read the channel)
+  DISCORD_CHANNEL_ID  ID of your announcements channel
+  DISCORD_GUILD_ID    ID of your server (used to build message links)
+  DISCORD_AUTHOR_ID   your own user ID, so only your posts are published (recommended)
+"""
+import json
+import os
+import sys
+import urllib.request
+import xml.etree.ElementTree as ET
+from datetime import datetime, timezone
+
+CHANNEL_ID = "UCmPdSMqbyTZeL9AYISa0iVw"  # youtube.com/@wermyle
+MAX_VIDEOS = 6
+MAX_POSTS = 4
+OUT = os.path.join(os.path.dirname(__file__), "..", "news.json")
+
+NS = {
+    "a": "http://www.w3.org/2005/Atom",
+    "yt": "http://www.youtube.com/xml/schemas/2015",
+    "media": "http://search.yahoo.com/mrss/",
+}
+
+
+def get(url, headers=None):
+    req = urllib.request.Request(url, headers={"User-Agent": "wermyle-site/1.0", **(headers or {})})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        return r.read()
+
+
+def youtube_items():
+    xml = get(f"https://www.youtube.com/feeds/videos.xml?channel_id={CHANNEL_ID}")
+    root = ET.fromstring(xml)
+    items = []
+    for e in root.findall("a:entry", NS)[:MAX_VIDEOS]:
+        vid = e.findtext("yt:videoId", default="", namespaces=NS)
+        group = e.find("media:group", NS)
+        views = None
+        if group is not None:
+            stats = group.find("media:community/media:statistics", NS)
+            if stats is not None and stats.get("views", "").isdigit():
+                views = int(stats.get("views"))
+        is_short = False
+        link = e.find("a:link", NS)
+        href = link.get("href") if link is not None else f"https://www.youtube.com/watch?v={vid}"
+        if "/shorts/" in href:
+            is_short = True
+        items.append({
+            "type": "video",
+            "id": vid,
+            "title": e.findtext("a:title", default="", namespaces=NS),
+            "date": e.findtext("a:published", default="", namespaces=NS),
+            "url": href,
+            "thumb": f"https://i.ytimg.com/vi/{vid}/hqdefault.jpg",
+            "views": views,
+            "short": is_short,
+        })
+    return items
+
+
+def youtube_stats():
+    key = os.environ.get("YOUTUBE_API_KEY")
+    if not key:
+        return None
+    data = json.loads(get(
+        f"https://www.googleapis.com/youtube/v3/channels?part=statistics&id={CHANNEL_ID}&key={key}"
+    ))
+    st = (data.get("items") or [{}])[0].get("statistics", {})
+    stats = {}
+    if not st.get("hiddenSubscriberCount") and st.get("subscriberCount", "").isdigit():
+        stats["subscribers"] = int(st["subscriberCount"])
+    for src, dst in (("viewCount", "views"), ("videoCount", "videos")):
+        if st.get(src, "").isdigit():
+            stats[dst] = int(st[src])
+    return stats or None
+
+
+def discord_items():
+    token = os.environ.get("DISCORD_TOKEN")
+    channel = os.environ.get("DISCORD_CHANNEL_ID")
+    if not token or not channel:
+        return []
+    guild = os.environ.get("DISCORD_GUILD_ID", "")
+    author = os.environ.get("DISCORD_AUTHOR_ID", "")
+    data = json.loads(get(
+        f"https://discord.com/api/v10/channels/{channel}/messages?limit=25",
+        {"Authorization": f"Bot {token}"},
+    ))
+    items = []
+    for m in data:
+        if author and m.get("author", {}).get("id") != author:
+            continue
+        text = (m.get("content") or "").strip()
+        if not text:
+            continue
+        image = next((a["url"] for a in m.get("attachments", []) if (a.get("content_type") or "").startswith("image/")), None)
+        items.append({
+            "type": "post",
+            "id": m["id"],
+            "title": text[:280] + ("…" if len(text) > 280 else ""),
+            "date": m.get("timestamp", ""),
+            "url": f"https://discord.com/channels/{guild}/{channel}/{m['id']}" if guild else None,
+            "thumb": image,
+        })
+        if len(items) >= MAX_POSTS:
+            break
+    return items
+
+
+def main():
+    old = {}
+    if os.path.exists(OUT):
+        try:
+            with open(OUT, encoding="utf-8") as f:
+                old = json.load(f)
+        except Exception:
+            old = {}
+    stats = old.get("stats")
+    try:
+        stats = youtube_stats() or stats
+    except Exception as exc:
+        print(f"youtube stats failed: {exc}", file=sys.stderr)
+    items = []
+    for name, fn in (("youtube", youtube_items), ("discord", discord_items)):
+        try:
+            items += fn()
+        except Exception as exc:  # keep the other source even if one fails
+            print(f"{name} failed: {exc}", file=sys.stderr)
+    if not items:
+        items = old.get("items", [])  # keep the previous list if every source failed
+    items.sort(key=lambda i: i.get("date") or "", reverse=True)
+    out = {"updated": datetime.now(timezone.utc).isoformat(timespec="seconds"), "items": items}
+    if stats:
+        out["stats"] = stats
+    with open(OUT, "w", encoding="utf-8") as f:
+        json.dump(out, f, ensure_ascii=False, indent=2)
+    print(f"Wrote {len(items)} items")
+
+
+if __name__ == "__main__":
+    main()

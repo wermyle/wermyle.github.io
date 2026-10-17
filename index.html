@@ -172,6 +172,30 @@ footer .wrap{padding-block:28px;color:var(--soft);font-size:14px;border-top:1px 
 body{overflow-x:hidden}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}[data-from]{transition:none}[data-from].pre{opacity:1;transform:none}[data-from="impact"].hit{animation:none}}
 
+/* latest news feed (filled from news.json by GitHub Actions) */
+.latest-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px}
+.latest-head h2{font-size:clamp(32px,5vw,52px);font-weight:800;color:var(--head);text-transform:uppercase}
+.latest-head small{color:var(--soft);font-size:13px;font-variant-numeric:tabular-nums}
+.feed{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.feed .item{display:grid;gap:10px;text-decoration:none;color:var(--ink);min-width:0}
+.feed .item:first-child{grid-column:span 2;grid-row:span 2}
+.feed .thumb{position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:var(--night2);border:1px solid #3a3442}
+.feed .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .35s}
+.feed .item:hover .thumb img{transform:scale(1.04)}
+.feed .badge{position:absolute;left:10px;top:10px;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:5px 9px;border-radius:999px;background:var(--head);color:var(--night)}
+.feed .badge.post{background:#5865F2;color:#fff}
+.feed .badge.short{background:#ff0000;color:#fff}
+.feed .play{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transition:opacity .25s;background:rgba(0,0,0,.25)}
+.feed .play span{width:64px;height:64px;border-radius:50%;background:rgba(0,0,0,.6);display:grid;place-items:center}
+.feed .play span::after{content:"";border-left:20px solid #fff;border-top:12px solid transparent;border-bottom:12px solid transparent;margin-left:5px}
+.feed .item:hover .play{opacity:1}
+.feed h3{font-size:17px;font-weight:700;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.feed .item:first-child h3{font-size:clamp(20px,2.4vw,26px)}
+.feed .meta{font-size:13px;color:var(--soft);font-variant-numeric:tabular-nums}
+.feed .post-text{padding:18px;aspect-ratio:auto;min-height:100%;display:flex;align-items:flex-end;font-size:15px;line-height:1.5;color:var(--ink);background:linear-gradient(160deg,#2b2540,var(--night2))}
+.feed-empty{display:grid;justify-items:center;gap:8px;text-align:center;padding:48px 20px;border:2px dashed #3a3442;border-radius:20px;color:var(--soft)}
+.feed-empty b{color:var(--ink);font-size:20px}
+@media (max-width:760px){.feed{grid-template-columns:1fr}.feed .item:first-child{grid-column:auto;grid-row:auto}}
 /* ---- mobile ---- */
 .burger{display:none;margin-left:auto;width:42px;height:42px;border-radius:12px;border:0;background:transparent;color:inherit;cursor:pointer;position:relative}
 .burger span{position:absolute;left:10px;right:10px;height:2px;border-radius:2px;background:currentColor;transition:transform .25s,opacity .2s}
@@ -215,6 +239,7 @@ body{overflow-x:hidden}
     <a class="brand" href="#top">WERMYLE</a>
     <button class="burger" type="button" aria-label="Menu" aria-expanded="false" id="burger"><span></span><span></span><span></span></button>
     <nav aria-label="Main">
+      <a href="#latest">Latest</a>
       <a href="#about">About</a>
       <a href="#projects">Mods</a>
       <a href="#stats">Numbers</a>
@@ -238,6 +263,18 @@ body{overflow-x:hidden}
     </div>
   </div>
 </header>
+
+<section id="latest">
+  <div class="wrap">
+    <div class="latest-head"><h2>Latest</h2><small id="feed-updated"></small></div>
+    <div class="feed" id="feed" hidden></div>
+    <div class="feed-empty" id="feed-empty">
+      <b>New videos will show up here</b>
+      <span>The site checks the YouTube channel every hour and adds fresh uploads automatically.</span>
+      <a class="btn" href="https://www.youtube.com/@wermyle" target="_blank" rel="noopener" style="margin-top:8px">Open the channel</a>
+    </div>
+  </div>
+</section>
 
 <section id="about">
   <div class="wrap split">
@@ -265,10 +302,10 @@ body{overflow-x:hidden}
   <div class="wrap">
     <div class="center"><h2>In numbers</h2></div>
     <div class="stats">
-      <div class="stat"><b data-count="4">0</b><span>Mods released</span></div>
-      <div class="stat"><b data-count="1200" data-suffix="+">0</b><span>Subscribers</span></div>
-      <div class="stat"><b data-count="85000" data-suffix="+">0</b><span>Mix plays</span></div>
-      <div class="stat"><b data-count="320">0</b><span>Discord members</span></div>
+      <div class="stat"><b data-key="subscribers">—</b><span>Subscribers</span></div>
+      <div class="stat"><b data-key="views">—</b><span>Channel views</span></div>
+      <div class="stat"><b data-key="videos">—</b><span>Videos</span></div>
+      <div class="stat"><b data-key="mods">?</b><span>Mods released</span></div>
     </div>
   </div>
 </section>
@@ -364,27 +401,55 @@ body{overflow-x:hidden}
   });
 })();
 
-/* top bar turns solid after the banner; counters run when they come into view */
+/* top bar turns solid after the banner; counters fill from news.json (updated hourly) and run when they come into view */
 (function(){
   const top=document.getElementById('topbar'),hero=document.getElementById('top');
   const onScroll=()=>top.classList.toggle('solid',scrollY>hero.offsetHeight-80);
   addEventListener('scroll',onScroll,{passive:true});onScroll();
   const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const fmt=n=>n.toLocaleString('en-US');
-  const io=new IntersectionObserver(es=>es.forEach(e=>{
-    if(!e.isIntersecting)return;io.unobserve(e.target);
-    const el=e.target,end=+el.dataset.count,suf=el.dataset.suffix||'';
-    if(still){el.textContent=fmt(end)+suf;return}
+  const fmt=n=>n>=1e6?(n/1e6).toFixed(n>=1e7?0:1).replace(/\.0$/,'')+'M':n.toLocaleString('en-US');
+  const MANUAL={mods:null}; // set mods released here, e.g. {mods:4}
+  function run(el){
+    if(el.dataset.done||el.dataset.count==null||!el.dataset.seen)return;el.dataset.done=1;
+    const end=+el.dataset.count;
+    if(still){el.textContent=fmt(end);return}
     const t0=performance.now(),dur=1600;
-    (function step(t){const k=Math.min(1,(t-t0)/dur),v=Math.round(end*(1-Math.pow(1-k,3)));el.textContent=fmt(v)+(k===1?suf:'');if(k<1)requestAnimationFrame(step)})(t0);
-  }),{threshold:.6});
-  document.querySelectorAll('[data-count]').forEach(el=>io.observe(el));
+    (function step(t){const k=Math.min(1,(t-t0)/dur),v=Math.round(end*(1-Math.pow(1-k,3)));el.textContent=k===1?fmt(end):v.toLocaleString('en-US');if(k<1)requestAnimationFrame(step)})(t0);
+  }
+  const els=[...document.querySelectorAll('.stat b[data-key]')];
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.dataset.seen=1;io.unobserve(e.target);run(e.target)}}),{threshold:.6});
+  els.forEach(el=>io.observe(el));
+  function fill(stats){els.forEach(el=>{const v=stats[el.dataset.key];if(typeof v==='number'){el.dataset.count=v;run(el)}})}
+  fill(MANUAL);
+  fetch('news.json?'+Date.now()).then(r=>r.ok?r.json():null).then(d=>{if(d&&d.stats)fill(d.stats)}).catch(()=>{});
 })();
 /* mobile menu */
 (function(){
   const top=document.getElementById('topbar'),b=top&&top.querySelector('.burger');if(!b)return;
   b.addEventListener('click',()=>{const o=top.classList.toggle('open');b.setAttribute('aria-expanded',o)});
   top.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',()=>{top.classList.remove('open');b.setAttribute('aria-expanded',false)}));
+})();
+/* latest feed from news.json */
+(function(){
+  const box=document.getElementById('feed'),empty=document.getElementById('feed-empty'),upd=document.getElementById('feed-updated');
+  const esc=t=>String(t||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const day=d=>{try{return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}catch(e){return ''}};
+  const ago=d=>{const m=Math.round((Date.now()-new Date(d))/60000);if(isNaN(m))return'';if(m<60)return m+' min ago';const h=Math.round(m/60);if(h<48)return h+' h ago';return day(d)};
+  fetch('news.json?'+Date.now()).then(r=>r.ok?r.json():null).then(data=>{
+    const items=(data&&data.items||[]).slice(0,7);
+    if(!items.length)return;
+    box.innerHTML=items.map(it=>{
+      const isPost=it.type==='post';
+      const badge=isPost?'<span class="badge post">Discord</span>':it.short?'<span class="badge short">Short</span>':'<span class="badge">Video</span>';
+      const media=it.thumb?`<img src="${esc(it.thumb)}" alt="" loading="lazy">`:`<div class="post-text">${esc(it.title)}</div>`;
+      const views=it.views!=null?` · ${Number(it.views).toLocaleString('en-US')} views`:'';
+      const tag=it.url?'a':'div',href=it.url?` href="${esc(it.url)}" target="_blank" rel="noopener"`:'';
+      return `<${tag} class="item"${href}><div class="thumb">${media}${badge}${isPost?'':'<div class="play"><span></span></div>'}</div>`+
+             (isPost&&!it.thumb?'':`<h3>${esc(it.title)}</h3>`)+`<div class="meta">${ago(it.date)}${views}</div></${tag}>`;
+    }).join('');
+    box.hidden=false;empty.hidden=true;
+    if(data.updated)upd.textContent='Updated '+ago(data.updated);
+  }).catch(()=>{});
 })();
 </script>
 </body>
