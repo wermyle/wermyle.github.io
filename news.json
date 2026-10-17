@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-17T21:23:17+00:00",
+  "updated": "2026-10-17T21:51:26+00:00",
   "items": [
     {
       "type": "video",
@@ -61,5 +61,10 @@
       "views": 1574,
       "short": true
     }
-  ]
+  ],
+  "stats": {
+    "subscribers": 351,
+    "views": 53243,
+    "videos": 14
+  }
 }
