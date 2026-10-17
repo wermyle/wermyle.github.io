@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>wermyle · mods</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#1d1a21">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,400;0,500;0,700;0,800;1,800&display=swap">
 <style>
 /* Layout: light banner fading into a lavender band with centred logo+title → dark split sections (big image | centred text) → contacts → fixed vertical icon rail on the right */
@@ -222,6 +227,11 @@ body{overflow-x:hidden}
   .entry .info{padding:4px max(56px,calc(env(safe-area-inset-right,0px) + 56px)) 30px max(20px,env(safe-area-inset-left,0px));max-width:none}
 }
 
+/* real art in a card: landscape behind, characters in front */
+.entry .art.has-img{display:block;background:none;-webkit-mask:linear-gradient(90deg,#000 70%,transparent 100%);mask:linear-gradient(90deg,#000 70%,transparent 100%)}
+.entry .art.has-img .scene img{position:absolute;left:50%;top:50%;width:150%;max-width:none;height:auto;transform:translate(-52%,-50%);opacity:.95}
+.entry .art.has-img .cast img{position:absolute;left:50%;bottom:-4%;width:auto;height:96%;max-width:none;transform:translateX(-50%);filter:drop-shadow(0 18px 30px rgba(30,10,50,.35))}
+@media (max-width:760px){.entry .art.has-img{min-height:340px;-webkit-mask:linear-gradient(180deg,#000 80%,transparent 100%);mask:linear-gradient(180deg,#000 80%,transparent 100%)}.entry .art.has-img .cast img{height:92%}}
 /* ---- mobile ---- */
 .burger{display:none;margin-left:auto;width:42px;height:42px;border-radius:12px;border:0;background:transparent;color:inherit;cursor:pointer;position:relative}
 .burger span{position:absolute;left:10px;right:10px;height:2px;border-radius:2px;background:currentColor;transition:transform .25s,opacity .2s}
@@ -286,40 +296,26 @@ body{overflow-x:hidden}
 <section id="list">
   <div class="wrap"><a class="back" href="./">← Back to home</a></div>
   <div class="series">
-    <div class="wrap"><div class="series-head"><h2>Series ?</h2><span>Series name goes here</span></div></div>
+    <div class="wrap"><div class="series-head"><h2>Heartbox</h2></div></div>
     <div class="entries">
-      <article class="entry" style="--c:#6d4a80">
-        <span class="new">NEW</span><div class="ph art"><span class="q">?</span>unnamed<small>Mod art</small></div>
-        <div class="info">
-          <span class="series-label">Series ?</span>
-          <div class="title"><span class="ver">V?</span><h3>Mod name</h3></div>
-          <span class="genre">Genre ?</span>
-          <p>A few lines about this mod: its theme, the kind of beats and voices it has and the mood it gives the player.</p>
-          <div class="actions"><a href="#">Download</a><a href="#">Read more</a></div>
+      <article class="entry" style="--c:#7e5b9a">
+        <span class="new">NEW</span>
+        <div class="art has-img">
+          <picture class="scene">
+            <source srcset="hwy-bg.avif" type="image/avif">
+            <img src="hwy-bg.webp" alt="" width="1313" height="589">
+          </picture>
+          <picture class="cast">
+            <source srcset="mods-art.avif" type="image/avif">
+            <source srcset="mods-art.webp" type="image/webp">
+            <img src="mods-art.png" alt="Happy With You characters" width="600" height="600">
+          </picture>
         </div>
-      </article>
-      <article class="entry" style="--c:#3f5a8a">
-        <div class="ph art"><span class="q">?</span>unnamed<small>Mod art</small></div>
         <div class="info">
-          <span class="series-label">Series ?</span>
-          <div class="title"><span class="ver">V?</span><h3>Mod name</h3></div>
-          <span class="genre">Genre ?</span>
-          <p>A few lines about this mod: its theme, the kind of beats and voices it has and the mood it gives the player.</p>
-          <div class="actions"><a href="#">Download</a><a href="#">Read more</a></div>
-        </div>
-      </article>
-    </div>
-  </div>
-  <div class="series">
-    <div class="wrap"><div class="series-head"><h2>Series ?</h2><span>Another series or standalone mods</span></div></div>
-    <div class="entries">
-      <article class="entry" style="--c:#8a4a66">
-        <div class="ph art"><span class="q">?</span>unnamed<small>Mod art</small></div>
-        <div class="info">
-          <span class="series-label">Series ?</span>
-          <div class="title"><span class="ver">V?</span><h3>Mod name</h3></div>
-          <span class="genre">Genre ?</span>
-          <p>A few lines about this mod: its theme, the kind of beats and voices it has and the mood it gives the player.</p>
+          <span class="series-label">Heartbox</span>
+          <div class="title"><span class="ver">V1</span><h3>HAPPY WITH YOU</h3></div>
+          <span class="genre">Dreampop, Chillwave</span>
+          <p>Somewhere between dreams and reality, a forgotten world awaits.</p>
           <div class="actions"><a href="#">Download</a><a href="#">Read more</a></div>
         </div>
       </article>
