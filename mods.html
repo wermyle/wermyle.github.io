@@ -232,6 +232,29 @@ body{overflow-x:hidden}
 .entry .art.has-img .scene img{position:absolute;left:50%;top:50%;width:150%;max-width:none;height:auto;transform:translate(-52%,-50%);opacity:.95}
 .entry .art.has-img .cast img{position:absolute;left:50%;bottom:-4%;width:auto;height:96%;max-width:none;transform:translateX(-50%);filter:drop-shadow(0 18px 30px rgba(30,10,50,.35))}
 @media (max-width:760px){.entry .art.has-img{min-height:340px;-webkit-mask:linear-gradient(180deg,#000 80%,transparent 100%);mask:linear-gradient(180deg,#000 80%,transparent 100%)}.entry .art.has-img .cast img{height:92%}}
+/* read more: mod details with auto-collected teasers */
+.entry .actions button.more{font:inherit;padding:11px 22px;border-radius:999px;background:rgba(0,0,0,.32);color:#fff;font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;border:0;cursor:pointer;transition:background .2s}
+.entry .actions button.more:hover{background:rgba(0,0,0,.5)}
+.modal{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.modal[hidden]{display:none!important}
+.modal-backdrop{position:absolute;inset:0;background:rgba(10,8,14,.75);backdrop-filter:blur(4px)}
+.modal-box{position:relative;width:min(860px,100%);max-height:88vh;overflow:auto;background:var(--mc,#7e5b9a);color:#fff;border-radius:24px;padding:34px;display:grid;gap:10px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.modal-box h3{font-size:clamp(28px,4vw,42px);font-weight:800;font-style:italic;line-height:1}
+.modal-box p{margin:0;opacity:.95;max-width:60ch}
+.modal-box h4{margin:14px 0 4px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
+.modal-x{position:absolute;top:14px;right:16px;width:40px;height:40px;border-radius:50%;border:0;background:rgba(0,0,0,.3);color:#fff;font-size:24px;line-height:1;cursor:pointer}
+.modal-x:hover{background:rgba(0,0,0,.5)}
+.teasers{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.teaser{display:grid;gap:8px;color:#fff;text-decoration:none;min-width:0}
+.teaser .th{position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:rgba(0,0,0,.25)}
+.teaser .th img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.teaser:hover .th img{transform:scale(1.05)}
+.teaser .th::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-40%,-50%);border-left:18px solid #fff;border-top:11px solid transparent;border-bottom:11px solid transparent;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5));opacity:.9}
+.teaser b{font-size:15px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.teaser small{opacity:.75;font-size:13px}
+.teasers-empty{opacity:.85;padding:18px;border:2px dashed rgba(255,255,255,.35);border-radius:16px;text-align:center}
+body.lock{overflow:hidden}
+@media (max-width:760px){.modal-box{padding:26px 20px}}
 /* ---- mobile ---- */
 .burger{display:none;margin-left:auto;width:42px;height:42px;border-radius:12px;border:0;background:transparent;color:inherit;cursor:pointer;position:relative}
 .burger span{position:absolute;left:10px;right:10px;height:2px;border-radius:2px;background:currentColor;transition:transform .25s,opacity .2s}
@@ -298,7 +321,7 @@ body{overflow-x:hidden}
   <div class="series">
     <div class="wrap"><div class="series-head"><h2>Heartbox</h2></div></div>
     <div class="entries">
-      <article class="entry" style="--c:#7e5b9a">
+      <article class="entry" style="--c:#7e5b9a" data-mod="happy-with-you">
         <span class="new">NEW</span>
         <div class="art has-img">
           <picture class="scene">
@@ -316,13 +339,26 @@ body{overflow-x:hidden}
           <div class="title"><span class="ver">V1</span><h3>HAPPY WITH YOU</h3></div>
           <span class="genre">Dreampop, Chillwave</span>
           <p>Somewhere between dreams and reality, a forgotten world awaits.</p>
-          <div class="actions"><a href="#">Download</a><a href="#">Read more</a></div>
+          <div class="actions"><a href="#">Download</a><button type="button" class="more" data-open="happy-with-you">Read more</button></div>
         </div>
       </article>
     </div>
   </div>
   <div class="wrap"><div class="soon"><b>More mods coming soon</b><span>Follow the YouTube channel to catch new releases first.</span><a class="btn" href="https://www.youtube.com/@wermyle" target="_blank" rel="noopener" style="margin-top:10px">YouTube</a></div></div>
 </section>
+
+<div class="modal" id="mod-modal" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="mm-title">
+    <button class="modal-x" type="button" data-close aria-label="Close">×</button>
+    <span class="series-label" id="mm-series"></span>
+    <h3 id="mm-title"></h3>
+    <span class="genre" id="mm-genre"></span>
+    <p id="mm-desc"></p>
+    <h4>Teasers</h4>
+    <div class="teasers" id="mm-teasers"></div>
+  </div>
+</div>
 
 <footer>
   <div class="wrap foot">
@@ -351,6 +387,36 @@ body{overflow-x:hidden}
   const top=document.getElementById('topbar'),b=top&&top.querySelector('.burger');if(!b)return;
   b.addEventListener('click',()=>{const o=top.classList.toggle('open');b.setAttribute('aria-expanded',o)});
   top.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',()=>{top.classList.remove('open');b.setAttribute('aria-expanded',false)}));
+})();
+/* read more: details + teasers collected automatically by keyword (scripts/update_news.py) */
+(function(){
+  const modal=document.getElementById('mod-modal');if(!modal)return;
+  const box=modal.querySelector('.modal-box'),list=document.getElementById('mm-teasers');
+  const esc=t=>String(t||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const day=d=>{try{return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}catch(e){return''}};
+  let data=null,lastBtn=null;
+  const load=()=>data?Promise.resolve(data):
+    fetch('https://raw.githubusercontent.com/wermyle/wermyle.github.io/main/news.json?'+Date.now())
+      .then(r=>r.ok?r:Promise.reject()).catch(()=>fetch('news.json?'+Date.now()))
+      .then(r=>r.ok?r.json():{}).then(d=>data=d||{}).catch(()=>data={});
+  function open(btn){
+    const card=btn.closest('.entry'),mod=btn.dataset.open;lastBtn=btn;
+    box.style.setProperty('--mc',getComputedStyle(card).getPropertyValue('--c'));
+    document.getElementById('mm-series').textContent=card.querySelector('.series-label').textContent;
+    document.getElementById('mm-title').textContent=card.querySelector('h3').textContent;
+    document.getElementById('mm-genre').textContent=card.querySelector('.genre').textContent;
+    document.getElementById('mm-desc').textContent=card.querySelector('.info p').textContent;
+    list.innerHTML='<p class="teasers-empty">Loading teasers…</p>';
+    modal.hidden=false;document.body.classList.add('lock');modal.querySelector('.modal-x').focus();
+    load().then(d=>{
+      const t=(d.teasers||{})[mod]||[];
+      list.innerHTML=t.length?t.map(v=>`<a class="teaser" href="${esc(v.url)}" target="_blank" rel="noopener"><span class="th"><img src="${esc(v.thumb)}" alt="" loading="lazy"></span><b>${esc(v.title)}</b><small>${day(v.date)}</small></a>`).join('')
+        :'<p class="teasers-empty">No teasers yet. They will show up here automatically as soon as they are on the YouTube channel.</p>';
+    });
+  }
+  function close(){modal.hidden=true;document.body.classList.remove('lock');if(lastBtn)lastBtn.focus()}
+  document.addEventListener('click',e=>{const b=e.target.closest('[data-open]');if(b)open(b);if(e.target.closest('[data-close]'))close()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)close()});
 })();
 </script>
 </body>
