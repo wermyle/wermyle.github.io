@@ -227,7 +227,7 @@ body.lock{overflow:hidden}
 
 /* fan mixes + fan art: lists come from the database, sending goes through the site's "push" function */
 (function(){
-  const FN='https://jhktsfthhmgshvzwbjmn.supabase.co/functions/v1/push';
+  const FN='https://jhktsfthhmgshvzwbjmn.supabase.co/functions/v1/super-action';
   const ART_URL='https://jhktsfthhmgshvzwbjmn.supabase.co/storage/v1/object/public/fanart/';
   const $=id=>document.getElementById(id);
   const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
