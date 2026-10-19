@@ -148,7 +148,7 @@ window.wm = (function () {
     if (!muted) q('.pc-vol').value = yt.getVolume();
     if (!on) box.classList.remove('idle');
   }
-  function fallback(id) {   // if the YouTube API can't load, show the normal YouTube player
+  function fallback(id) {   // the normal YouTube player: for Shorts, or if the YouTube API can't load
     box.classList.add('native');
     stage.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&playsinline=1" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="Video"></iframe>`;
   }
@@ -164,6 +164,7 @@ window.wm = (function () {
     box.hidden = false;
     document.body.classList.add('lock');
     box.querySelector('.player-x').focus();
+    if (short) return fallback(id);   // Shorts use YouTube's own player and buttons
     loadApi().then(() => {
       if (box.hidden) return;
       yt = new YT.Player(stage.firstChild, {
