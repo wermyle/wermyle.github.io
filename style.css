@@ -158,3 +158,20 @@ body.lock{overflow:hidden}
 .player.vertical .player-title{font-size:14px}
 @media (max-width:760px){.player-yt{display:none}.pc-vol{display:none}.pc-time{min-width:0;font-size:12px}}
 @media (prefers-reduced-motion:reduce){.player-bg,.player-box{animation:none}}
+/* ---------- polls: "new poll" note and menu dot (the poll cards live on the home page) ---------- */
+.top nav a.has-dot{position:relative}
+.top nav a.has-dot::after{content:"";position:absolute;top:-2px;right:-9px;width:7px;height:7px;border-radius:50%;background:#ff6b8b;box-shadow:0 0 0 2px color-mix(in srgb,#ff6b8b 30%,transparent)}
+.poll-toast{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:7;display:flex;align-items:center;gap:12px;max-width:min(440px,calc(100vw - 32px));padding:12px 12px 12px 14px;border-radius:18px;background:var(--night2);border:1px solid color-mix(in srgb,var(--head) 45%,#3a3442);box-shadow:0 12px 34px rgba(0,0,0,.45);animation:toastin .45s cubic-bezier(.2,.9,.3,1.2);transition:opacity .3s,transform .3s}
+.poll-toast.out{opacity:0;transform:translateY(16px)}
+.poll-toast .pt-ico{flex:none;width:38px;height:38px;border-radius:50%;background:var(--head);display:grid;place-items:center}
+.poll-toast .pt-ico svg{width:20px;height:20px;fill:var(--night)}
+.poll-toast div{min-width:0;display:grid;line-height:1.3}
+.poll-toast b{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--head)}
+.poll-toast span{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.poll-toast .btn{flex:none;padding:9px 18px;font-size:12px}
+.poll-toast button{flex:none;width:30px;height:30px;border-radius:50%;border:0;background:transparent;color:var(--soft);font-size:20px;line-height:1;cursor:pointer}
+.poll-toast button:hover{color:var(--ink);background:#3a3442}
+@keyframes toastin{from{opacity:0;transform:translateY(24px) scale(.96)}}
+@media (max-width:760px){.poll-toast{left:12px;right:12px;max-width:none;bottom:calc(76px + env(safe-area-inset-bottom,0px))}}
+@media (prefers-reduced-motion:reduce){.poll-toast{animation:none}}
+@media (max-width:760px){.top nav a.has-dot::after{position:static;display:inline-block;margin-left:8px;vertical-align:2px}}

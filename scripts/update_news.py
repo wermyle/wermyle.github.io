@@ -169,8 +169,12 @@ SUPABASE_KEY = "sb_publishable_av74U9zcHh30VMarvBjZ-g_rasiFST_"  # publishable k
 
 
 def ping_supabase():
-    get(f"{SUPABASE_URL}/rest/v1/chat_messages?select=id&limit=1",
-        {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"})
+    """Keeps the project awake and deletes chat messages older than chat_settings.keep_hours."""
+    req = urllib.request.Request(
+        f"{SUPABASE_URL}/rest/v1/rpc/chat_prune", data=b"{}", method="POST",
+        headers={"User-Agent": "wermyle-site/1.0", "Content-Type": "application/json",
+                 "apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"})
+    urllib.request.urlopen(req, timeout=30).read()
 
 
 def main():

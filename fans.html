@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Fan corner | Wermyle</title>
+<meta name="description" content="Fan mixes and fan art made with wermyle's Incredibox mods.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Wermyle">
+<meta property="og:title" content="Fan corner | Wermyle">
+<meta property="og:description" content="Fan mixes and fan art made with wermyle's Incredibox mods.">
+<meta property="og:url" content="https://wermyle.github.io/fans">
+<meta property="og:image" content="https://wermyle.github.io/og-home.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#bc9fcb">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,400;0,500;0,700;0,800;1,800&display=swap">
+<link rel="stylesheet" href="style.css">
+<style>
+.top{position:fixed;top:0;left:0;right:0;z-index:6;background:color-mix(in srgb,var(--night) 92%,transparent);box-shadow:0 6px 24px rgba(0,0,0,.35)}
+.top .brand,.top nav a{color:var(--ink)}
+.mhero{background:linear-gradient(180deg,var(--paper) 0%,var(--band) 55%,color-mix(in srgb,var(--band) 45%,var(--night)) 80%,var(--night) 100%);color:var(--dark-ink)}
+.mhero .wrap{padding-block:120px 80px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:36px;align-items:center}
+.mhero .avatar{display:block;width:clamp(130px,18vw,190px);height:auto;filter:drop-shadow(0 12px 24px rgba(0,0,0,.25))}
+.mhero h1{font-size:clamp(46px,8vw,88px);font-weight:800;letter-spacing:-.02em;font-style:italic}
+.mhero p{margin:10px 0 18px;max-width:52ch;font-size:17px;opacity:.88}
+.jump{display:flex;gap:12px;flex-wrap:wrap}
+.mhero .btn.ghost{background:transparent;color:var(--dark-ink);border:2px solid var(--dark-ink)}
+.mhero .btn.ghost:hover{background:var(--dark-ink);color:var(--paper)}
+.head{display:flex;align-items:baseline;gap:14px;margin-bottom:26px;flex-wrap:wrap}
+.head h2{font-size:clamp(30px,5vw,48px);font-weight:800;color:var(--head);text-transform:uppercase}
+.head span{color:var(--soft);font-size:14px;font-weight:700}
+#art{background:color-mix(in srgb,var(--night2) 65%,transparent)}
+/* fan mixes */
+.mixes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.mix{display:grid;gap:4px;align-content:start;min-width:0}
+.mix>a{display:grid;gap:8px;text-decoration:none;color:var(--ink);min-width:0}
+.mix small a{color:var(--head);font-weight:700;text-decoration:none}
+.mix small a:hover{text-decoration:underline}
+.mix .th{position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:var(--night2);border:1px solid #3a3442}
+.mix .th img{width:100%;height:100%;object-fit:cover;transition:transform .35s}
+.mix:hover .th img{transform:scale(1.04)}
+.mix .th::after{content:"";position:absolute;left:50%;top:50%;width:58px;height:58px;margin:-29px 0 0 -29px;border-radius:50%;background:rgba(0,0,0,.55) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M8 5.5v13l11-6.5z'/%3E%3C/svg%3E") center/26px no-repeat;opacity:0;transition:opacity .25s}
+.mix:hover .th::after{opacity:1}
+.mix .tag{position:absolute;left:10px;top:10px;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:5px 9px;border-radius:999px;background:#ff0000;color:#fff}
+.mix b{font-size:16px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mix small{color:var(--soft);font-size:13px}
+/* fan art wall */
+.wall{columns:4 220px;column-gap:16px}
+.piece{display:block;width:100%;margin:0 0 16px;padding:0;border:0;border-radius:16px;overflow:hidden;position:relative;background:var(--night2);cursor:zoom-in;break-inside:avoid}
+.piece img{display:block;width:100%;height:auto;transition:transform .4s}
+.piece:hover img{transform:scale(1.04)}
+.piece span{position:absolute;left:0;right:0;bottom:0;padding:26px 12px 10px;text-align:left;font:inherit;font-size:13px;font-weight:700;color:#fff;background:linear-gradient(transparent,rgba(12,10,16,.85));opacity:0;transition:opacity .25s}
+.piece:hover span,.piece:focus-visible span{opacity:1}
+@media (hover:none){.piece span{opacity:1}}
+.empty{margin:0;text-align:center;color:var(--soft);padding:40px 20px;border:2px dashed #3a3442;border-radius:20px}
+/* send forms */
+.send{margin-top:34px;padding:24px;border-radius:22px;background:var(--night2);border:1px solid #3a3442;display:grid;gap:14px}
+#art .send{background:var(--night)}
+.send h3{font-size:20px;font-weight:800}
+.send p.sub{margin:-8px 0 0;color:var(--soft);font-size:14px}
+.line{display:flex;gap:10px;flex-wrap:wrap}
+.in{font:inherit;font-size:16px;color:var(--ink);background:var(--night);border:1px solid #4a4354;border-radius:999px;padding:12px 18px;min-width:0;flex:1 1 220px}
+#art .in{background:var(--night2)}
+.in:focus{outline:none;border-color:var(--head);box-shadow:0 0 0 3px color-mix(in srgb,var(--head) 30%,transparent)}
+.send .btn{border:0;cursor:pointer;font-family:inherit}
+.send .btn:disabled{opacity:.5;cursor:wait}
+.msg{margin:0;font-size:14px;font-weight:700}
+.msg:empty{display:none}
+.msg.ok{color:#7be29b}
+.msg.err{color:#ff8fa3}
+.drop{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:center;padding:16px;border:2px dashed #4a4354;border-radius:18px;cursor:pointer;transition:border-color .2s,background .2s}
+.drop:hover,.drop.over{border-color:var(--head);background:color-mix(in srgb,var(--head) 8%,transparent)}
+.drop .pv{width:84px;height:84px;border-radius:12px;background:var(--night2) center/cover no-repeat;display:grid;place-items:center;color:var(--soft)}
+.drop .pv svg{width:34px;height:34px;fill:currentColor}
+.drop b{display:block}
+.drop small{color:var(--soft)}
+.drop input{position:absolute;opacity:0;width:1px;height:1px}
+.hp{position:absolute!important;left:-9999px;width:1px;height:1px;overflow:hidden}
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top,0px)) 16px max(16px,env(safe-area-inset-bottom,0px))}
+.lb-bg{position:absolute;inset:0;background:rgba(10,8,14,.9);backdrop-filter:blur(6px)}
+.lb figure{position:relative;margin:0;display:grid;gap:12px;justify-items:center;max-width:min(1100px,100%)}
+.lb img{display:block;max-width:100%;max-height:calc(100vh - 140px);border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.lb figcaption{text-align:center;color:var(--soft);font-size:15px}
+.lb figcaption b{color:var(--ink)}
+.lb figcaption a{display:inline-flex;align-items:center;gap:6px;margin-left:8px;padding:4px 12px;border-radius:999px;background:var(--head);color:var(--night);font-weight:800;font-size:13px;text-decoration:none}
+.lb figcaption a:hover{background:var(--ink)}
+.piece em{font-style:normal;opacity:.75;font-weight:600}
+.lb button{position:absolute;z-index:1;width:46px;height:46px;border-radius:50%;border:0;background:var(--head);color:var(--night);font-size:24px;line-height:1;cursor:pointer;display:grid;place-items:center}
+.lb button:hover{background:var(--ink)}
+.lb .x{top:max(16px,env(safe-area-inset-top,0px));right:16px}
+.lb .prev{left:16px;top:50%;transform:translateY(-50%)}
+.lb .next{right:16px;top:50%;transform:translateY(-50%)}
+body.lock{overflow:hidden}
+.vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (max-width:760px){
+.mhero .wrap{grid-template-columns:1fr;justify-items:center;text-align:center;padding-block:92px 60px}
+.mhero p{margin-inline:auto}
+.jump{justify-content:center}
+.mixes{grid-template-columns:1fr}
+.wall{columns:2;column-gap:10px}
+.piece{margin-bottom:10px;border-radius:12px}
+.send{padding:18px}
+.lb .prev,.lb .next{top:auto;bottom:max(16px,env(safe-area-inset-bottom,0px));transform:none}
+.lb img{max-height:calc(100vh - 190px)}
+}
+</style>
+</head>
+<body>
+<div id="mq" aria-hidden="true"></div>
+
+<header class="top solid" id="topbar">
+  <div class="bar">
+    <a class="brand" href="./">WERMYLE</a>
+    <button class="burger" type="button" aria-label="Menu" aria-expanded="false" id="burger"><span></span><span></span><span></span></button>
+    <nav aria-label="Main">
+      <a href="./#about">About</a>
+      <a href="mods.html">Mods</a>
+      <a href="fans.html" aria-current="page">Fans</a>
+      <a href="./#polls">Polls</a>
+      <a href="./#contacts">Socials</a>
+    </nav>
+  </div>
+</header>
+
+<header class="mhero">
+  <div class="wrap">
+    <img class="avatar" src="about.png" alt="wermyle">
+    <div>
+      <h1>FAN CORNER</h1>
+      <p>Mixes and drawings made by you, with my mods. Send yours and it shows up here as soon as I've seen it. Thank you for every one!</p>
+      <div class="jump"><a class="btn" href="#mixes">Fan mixes</a><a class="btn ghost" href="#art">Fan art</a></div>
+    </div>
+  </div>
+</header>
+
+<section id="mixes">
+  <div class="wrap">
+    <div class="head"><h2>Fan mixes</h2><span id="mix-count"></span></div>
+    <div class="mixes" id="mix-list"><p class="empty" style="grid-column:1/-1">Loading…</p></div>
+    <form class="send" id="mix-form" novalidate>
+      <h3>Made a mix with one of my mods?</h3>
+      <p class="sub">Paste the YouTube link. It appears here after I check it.</p>
+      <div class="line">
+        <label class="vh" for="mix-link">YouTube link</label>
+        <input class="in" id="mix-link" type="url" inputmode="url" placeholder="https://youtu.be/…" autocomplete="off" required>
+        <button class="btn" type="submit" id="mix-send">Send</button>
+      </div>
+      <p class="msg" id="mix-msg" role="status"></p>
+    </form>
+  </div>
+</section>
+
+<section id="art">
+  <div class="wrap">
+    <div class="head"><h2>Fan art</h2><span id="art-count"></span></div>
+    <div class="wall" id="wall"><p class="empty">Loading…</p></div>
+    <form class="send" id="art-form" novalidate>
+      <h3>Drew one of my characters?</h3>
+      <p class="sub">Send your picture and it goes up on the wall after I check it. PNG, JPG or WebP.</p>
+      <label class="drop" id="drop">
+        <span class="pv" id="pv"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm0 12.5V18h14v-3l-4-4-5 5-2-2zM8.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg></span>
+        <span><b id="drop-text">Choose a picture</b><small>or drop it here</small></span>
+        <input type="file" id="art-file" accept="image/png,image/jpeg,image/webp,image/gif">
+      </label>
+      <div class="line">
+        <label class="vh" for="art-name">Your nickname</label>
+        <input class="in" id="art-name" maxlength="24" placeholder="Your nickname" autocomplete="nickname" required>
+        <label class="vh" for="art-title">Title</label>
+        <input class="in" id="art-title" maxlength="80" placeholder="Title (optional)" autocomplete="off">
+      </div>
+      <div class="line">
+        <label class="vh" for="art-link">Your social page</label>
+        <input class="in" id="art-link" maxlength="200" inputmode="url" placeholder="Your page (optional): TikTok, Instagram, YouTube…" autocomplete="url">
+      </div>
+      <input class="hp" id="art-web" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <div><button class="btn" type="submit" id="art-send">Send picture</button></div>
+      <p class="msg" id="art-msg" role="status"></p>
+    </form>
+  </div>
+</section>
+
+<div class="lb" id="lb" hidden>
+  <div class="lb-bg" data-close></div>
+  <button type="button" class="x" data-close aria-label="Close">×</button>
+  <button type="button" class="prev" aria-label="Previous">‹</button>
+  <button type="button" class="next" aria-label="Next">›</button>
+  <figure><img id="lb-img" alt=""><figcaption id="lb-cap"></figcaption></figure>
+</div>
+
+<footer>
+  <div class="wrap foot">
+    <div><div class="brandline">WERMYLE</div><p>Incredibox mods, animations, teasers, and more</p></div>
+    <div><h4>Mods</h4><ul><li><a href="mods.html">All mods</a></li><li><a href="./#projects">Featured</a></li></ul></div>
+    <div><h4>Community</h4><ul><li><a href="fans.html">Fan corner</a></li><li><a href="https://www.youtube.com/@wermyle" target="_blank" rel="noopener">YouTube</a></li><li><a href="#">Discord (soon)</a></li></ul></div>
+    <div><h4>More</h4><ul><li><a href="./#about">About me</a></li><li><a href="./#contacts">Socials</a></li></ul></div>
+  </div>
+  <div class="wrap copy">© 2026 wermyle</div>
+</footer>
+
+<script src="site.js"></script>
+<script>
+/* background rows of WERMYLE */
+(function(){
+  const mq=document.getElementById('mq');
+  function build(){
+    mq.innerHTML='';
+    const rows=Math.max(5,Math.round(innerHeight/130)),per=Math.max(6,Math.ceil(innerWidth/300)*2);
+    for(let r=0;r<rows;r++){const row=document.createElement('div');row.className='row';row.style.animationDelay=(-r*7)+'s';
+      for(let i=0;i<per*2;i++){const sp=document.createElement('span');sp.textContent='WERMYLE';row.appendChild(sp)}mq.appendChild(row)}
+  }
+  build();let t;addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(build,200)});
+})();
+/* mobile menu */
+(function(){
+  const top=document.getElementById('topbar'),b=top.querySelector('.burger');
+  b.addEventListener('click',()=>{const o=top.classList.toggle('open');b.setAttribute('aria-expanded',o)});
+  top.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',()=>{top.classList.remove('open');b.setAttribute('aria-expanded',false)}));
+})();
+
+/* fan mixes + fan art: lists come from the database, sending goes through the site's "push" function */
+(function(){
+  const FN='https://jhktsfthhmgshvzwbjmn.supabase.co/functions/v1/push';
+  const ART_URL='https://jhktsfthhmgshvzwbjmn.supabase.co/storage/v1/object/public/fanart/';
+  const $=id=>document.getElementById(id);
+  const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const say=(el,t,kind)=>{el.textContent=t||'';el.className='msg'+(kind?' '+kind:'')};
+  const plural=(n,w)=>n+' '+w+(n===1?'':'s');
+  // a short name for the artist's page: "TikTok", "Instagram"… or just the site's address
+  const SITES={'tiktok.com':'TikTok','instagram.com':'Instagram','youtube.com':'YouTube','youtu.be':'YouTube','x.com':'X','twitter.com':'X',
+    'deviantart.com':'DeviantArt','t.me':'Telegram','vk.com':'VK','discord.gg':'Discord','discord.com':'Discord','pinterest.com':'Pinterest',
+    'artstation.com':'ArtStation','twitch.tv':'Twitch','tumblr.com':'Tumblr','bsky.app':'Bluesky','reddit.com':'Reddit','scratch.mit.edu':'Scratch'};
+  const site=l=>{try{const h=new URL(l).hostname.replace(/^(www|m)\./,'');return SITES[h]||Object.entries(SITES).find(([d])=>h.endsWith('.'+d))?.[1]||h}catch(_){return 'Page'}};
+  async function api(body){
+    let r;
+    try{r=await fetch(FN,{method:'POST',body:body instanceof FormData?body:JSON.stringify(body),headers:body instanceof FormData?{}:{'Content-Type':'application/json'}})}
+    catch(_){throw new Error('Could not send. Check your connection and try again.')}
+    const out=await r.json().catch(()=>({}));
+    if(!r.ok||out.error)throw new Error(out.error||'Could not send, try again later.');
+    return out;
+  }
+
+  // ----- fan mixes -----
+  wm.rpc('fan_mixes_list').then(list=>{
+    $('mix-count').textContent=list.length?plural(list.length,'video'):'';
+    $('mix-list').innerHTML=list.length?list.map(m=>
+      `<div class="mix"><a href="https://www.youtube.com/${m.short?'shorts/':'watch?v='}${esc(m.video_id)}" target="_blank" rel="noopener" data-video="${esc(m.video_id)}" data-title="${esc(m.title)}"${m.short?' data-short="1"':''}>
+        <span class="th"><img src="https://i.ytimg.com/vi/${esc(m.video_id)}/hqdefault.jpg" alt="" loading="lazy">${m.short?'<span class="tag">Shorts</span>':''}</span>
+        <b>${esc(m.title)}</b></a><small>${m.channel?'by '+(m.channel_url?`<a href="${esc(m.channel_url)}" target="_blank" rel="noopener">${esc(m.channel)}</a>`:esc(m.channel)):''}</small></div>`).join('')
+      :'<p class="empty" style="grid-column:1/-1">No fan mixes yet. Be the first to send one!</p>';
+  }).catch(()=>{$('mix-list').innerHTML='<p class="empty" style="grid-column:1/-1">Fan mixes could not load. Try refreshing the page.</p>'});
+
+  $('mix-form').addEventListener('submit',async e=>{
+    e.preventDefault();
+    const link=$('mix-link').value.trim();
+    if(!link)return say($('mix-msg'),'Paste a YouTube link first','err');
+    $('mix-send').disabled=true;say($('mix-msg'),'Sending…');
+    try{await api({action:'mix_submit',link});$('mix-link').value='';say($('mix-msg'),"Thank you! I'll check it soon.",'ok')}
+    catch(err){say($('mix-msg'),err.message,'err')}
+    $('mix-send').disabled=false;
+  });
+
+  // ----- fan art wall + lightbox -----
+  let art=[],cur=0,lastFocus=null;
+  const lb=$('lb');
+  function show(i){
+    cur=(i+art.length)%art.length;const a=art[cur];
+    $('lb-img').src=ART_URL+a.path;$('lb-img').alt=a.title||'Fan art by '+a.name;
+    $('lb-cap').innerHTML=(a.title?'<b>'+esc(a.title)+'</b> · ':'')+'by '+esc(a.name)+
+      (a.link?`<a href="${esc(a.link)}" target="_blank" rel="noopener nofollow ugc">${esc(site(a.link))} ↗</a>`:'');
+  }
+  function open(i){lastFocus=document.activeElement;show(i);lb.hidden=false;document.body.classList.add('lock');lb.querySelector('.x').focus()}
+  function close(){lb.hidden=true;$('lb-img').src='';document.body.classList.remove('lock');if(lastFocus)lastFocus.focus()}
+  lb.addEventListener('click',e=>{if(e.target.closest('[data-close]'))close()});
+  lb.querySelector('.prev').addEventListener('click',()=>show(cur-1));
+  lb.querySelector('.next').addEventListener('click',()=>show(cur+1));
+  document.addEventListener('keydown',e=>{if(lb.hidden)return;if(e.key==='Escape')close();else if(e.key==='ArrowLeft')show(cur-1);else if(e.key==='ArrowRight')show(cur+1)});
+  let touchX=null;
+  lb.addEventListener('touchstart',e=>{touchX=e.touches[0].clientX},{passive:true});
+  lb.addEventListener('touchend',e=>{if(touchX==null)return;const dx=e.changedTouches[0].clientX-touchX;if(Math.abs(dx)>50)show(cur+(dx<0?1:-1));touchX=null});
+
+  wm.rpc('fan_art_list').then(list=>{
+    art=list;
+    $('art-count').textContent=list.length?plural(list.length,'picture'):'';
+    $('wall').innerHTML=list.length?list.map((a,i)=>
+      `<button type="button" class="piece" data-i="${i}" aria-label="${esc((a.title||'Fan art')+' by '+a.name)}"><img src="${ART_URL+esc(a.path)}" alt="" loading="lazy" width="${a.width||1}" height="${a.height||1}"><span>${a.title?esc(a.title)+' · ':''}by ${esc(a.name)}${a.link?' <em>· '+esc(site(a.link))+'</em>':''}</span></button>`).join('')
+      :'<p class="empty">No fan art yet. Draw one of my characters and send it below!</p>';
+  }).catch(()=>{$('wall').innerHTML='<p class="empty">Fan art could not load. Try refreshing the page.</p>'});
+  $('wall').addEventListener('click',e=>{const p=e.target.closest('.piece');if(p)open(+p.dataset.i)});
+
+  // ----- sending a picture: it's made smaller in the browser first (max 1600 px, WebP) -----
+  let picked=null;
+  const PV=$('pv').innerHTML;
+  try{$('art-name').value=localStorage.getItem('chat-name')||''}catch(_){}
+  function pick(file){
+    if(!file)return;
+    if(!/^image\//.test(file.type))return say($('art-msg'),'That is not a picture','err');
+    if(file.size>20*1024*1024)return say($('art-msg'),'The picture is too big (20 MB max)','err');
+    picked=file;say($('art-msg'),'');
+    $('drop-text').textContent=file.name;
+    const url=URL.createObjectURL(file);$('pv').style.backgroundImage=`url("${url}")`;$('pv').innerHTML='';
+  }
+  $('art-file').addEventListener('change',e=>pick(e.target.files[0]));
+  const drop=$('drop');
+  ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over')}));
+  ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over')}));
+  drop.addEventListener('drop',e=>pick(e.dataTransfer.files[0]));
+
+  async function shrink(file){
+    const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=()=>rej(new Error('This picture could not be opened'));i.src=URL.createObjectURL(file)});
+    const k=Math.min(1,1600/Math.max(img.naturalWidth,img.naturalHeight));
+    const w=Math.max(1,Math.round(img.naturalWidth*k)),h=Math.max(1,Math.round(img.naturalHeight*k));
+    const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
+    let blob=await new Promise(r=>c.toBlob(r,'image/webp',.86));
+    if(!blob||blob.type!=='image/webp')blob=await new Promise(r=>c.toBlob(r,'image/jpeg',.88));   // older Safari
+    return {blob,w,h};
+  }
+  $('art-form').addEventListener('submit',async e=>{
+    e.preventDefault();
+    const name=$('art-name').value.trim();
+    if(!picked)return say($('art-msg'),'Choose a picture first','err');
+    if(!name)return say($('art-msg'),'Enter your nickname','err');
+    $('art-send').disabled=true;say($('art-msg'),'Sending…');
+    try{
+      const {blob,w,h}=await shrink(picked);
+      const fd=new FormData();
+      fd.append('file',blob,'art.'+(blob.type==='image/webp'?'webp':'jpg'));
+      fd.append('name',name);fd.append('title',$('art-title').value.trim());fd.append('link',$('art-link').value.trim());
+      fd.append('width',w);fd.append('height',h);fd.append('website',$('art-web').value);
+      await api(fd);
+      try{localStorage.setItem('chat-name',name)}catch(_){}
+      picked=null;$('art-file').value='';$('art-title').value='';$('art-link').value='';
+      $('pv').style.backgroundImage='';$('pv').innerHTML=PV;$('drop-text').textContent='Choose a picture';
+      say($('art-msg'),"Thank you! Your picture goes up on the wall after I check it.",'ok');
+    }catch(err){say($('art-msg'),err.message,'err')}
+    $('art-send').disabled=false;
+  });
+})();
+
+/* scroll-reveal animations (engine in site.js) */
+wm.reveal([
+  ['.mhero .avatar','left'],['.mhero .wrap > div','right'],
+  ['.head','up'],['.send','up']
+]);
+</script>
+</body>
+</html>

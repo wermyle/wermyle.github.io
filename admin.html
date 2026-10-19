@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Admin | Wermyle</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<meta name="theme-color" content="#bc9fcb">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;700;800&display=swap">
+<link rel="stylesheet" href="style.css">
+<style>
+body{min-height:100vh}
+.adm{max-width:760px;margin:0 auto;padding:max(28px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 80px max(16px,env(safe-area-inset-left,0px))}
+.adm-head{display:flex;align-items:center;gap:14px;margin-bottom:28px}
+.adm-head a{font-weight:800;letter-spacing:.06em;text-decoration:none}
+.adm-head span{color:var(--soft);font-weight:700;font-size:14px;letter-spacing:.12em;text-transform:uppercase}
+.adm-head button{margin-left:auto}
+.box{background:var(--night2);border:1px solid #3a3442;border-radius:22px;padding:24px;margin-bottom:22px}
+.box h2{font-size:20px;font-weight:800;margin-bottom:6px}
+.box > p{margin:0 0 16px;color:var(--soft);font-size:14px}
+label.f{display:grid;gap:6px;margin-bottom:14px;font-size:13px;font-weight:700;color:var(--soft);letter-spacing:.04em}
+.in{font:inherit;font-size:16px;color:var(--ink);background:var(--night);border:1px solid #4a4354;border-radius:12px;padding:11px 14px;min-width:0;width:100%}
+.in:focus{outline:none;border-color:var(--head);box-shadow:0 0 0 3px color-mix(in srgb,var(--head) 30%,transparent)}
+select.in{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--soft) 50%),linear-gradient(135deg,var(--soft) 50%,transparent 50%);background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;background-size:6px 6px;background-repeat:no-repeat}
+.opt-row{display:flex;gap:8px;margin-bottom:8px}
+.x{flex:none;width:44px;border-radius:12px;border:1px solid #4a4354;background:var(--night);color:var(--soft);font-size:20px;cursor:pointer}
+.x:hover{color:var(--ink);border-color:var(--head)}
+.link{font:inherit;font-weight:700;font-size:14px;color:var(--head);background:none;border:0;padding:4px 0;cursor:pointer}
+.link:hover{text-decoration:underline}
+.check{display:flex;align-items:center;gap:10px;margin:6px 0 16px;font-weight:600;font-size:15px}
+.check input{width:18px;height:18px;accent-color:var(--band)}
+.btn{border:0;cursor:pointer;font-family:inherit}
+.btn:disabled{opacity:.5;cursor:wait}
+.btn.line{background:transparent;color:var(--head);box-shadow:inset 0 0 0 2px var(--head)}
+.btn.line:hover{background:var(--head);color:var(--night)}
+.btn.small{padding:8px 16px;font-size:11px}
+.btn.danger{background:transparent;color:#ff8fa3;box-shadow:inset 0 0 0 2px #ff8fa3}
+.btn.danger:hover,.btn.danger.sure{background:#ff8fa3;color:var(--night)}
+.msg{margin:12px 0 0;font-weight:700;font-size:14px;min-height:1.2em}
+.msg.ok{color:#7be29b}
+.msg.err{color:#ff8fa3}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stat-line{display:flex;align-items:baseline;gap:10px;margin-bottom:14px}
+.stat-line b{font-size:34px;font-weight:800;color:var(--head);line-height:1}
+.ap{border-top:1px solid #3a3442;padding:18px 0}
+.ap:first-of-type{border-top:0;padding-top:4px}
+.ap-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--soft);margin-bottom:6px}
+.ap h3{font-size:17px;font-weight:800;margin-bottom:10px;line-height:1.3}
+.bar{position:relative;display:flex;justify-content:space-between;gap:10px;padding:7px 12px;margin-bottom:6px;border-radius:10px;background:var(--night);overflow:hidden;isolation:isolate;font-size:14px}
+.bar::before{content:"";position:absolute;inset:0 auto 0 0;width:var(--w);background:color-mix(in srgb,var(--head) 22%,transparent);z-index:-1}
+.bar span{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ap-btns{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:#3a3442;color:var(--soft)}
+.tag.open{background:#3fbf6e;color:#0e2716}
+.hint{font-size:13px;color:var(--soft);margin:6px 0 0}
+.fan-row{display:grid;grid-template-columns:120px minmax(0,1fr);gap:14px;align-items:center;border-top:1px solid #3a3442;padding:14px 0}
+.fan-row img{width:120px;aspect-ratio:16/9;object-fit:cover;border-radius:10px;background:var(--night)}
+.fan-row b{display:block;line-height:1.3;overflow-wrap:anywhere}
+.fan-row small{color:var(--soft)}
+.arts{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;margin-top:14px}
+.art-tile{display:grid;gap:8px;align-content:start;background:var(--night);border:1px solid #3a3442;border-radius:14px;padding:10px}
+.art-tile.pending{border-color:#d9b25a}
+.art-tile a{display:block;border-radius:10px;overflow:hidden;background:#000}
+.art-tile img{display:block;width:100%;height:150px;object-fit:contain}
+.art-tile b{font-size:14px;line-height:1.3;overflow-wrap:anywhere}
+.art-tile small{color:var(--soft);font-size:12px}
+.tag.wait{background:#d9b25a;color:#2a2108}
+.add-line{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.add-line .in{flex:1 1 240px}
+#login{max-width:420px;margin:12vh auto 0}
+@media (max-width:560px){.row2{grid-template-columns:1fr}.box{padding:18px}}
+</style>
+</head>
+<body data-no-toast>
+<main class="adm">
+  <div class="adm-head"><a href="./">WERMYLE</a><span>Admin</span><button class="btn line small" id="logout" hidden>Sign out</button></div>
+
+  <form class="box" id="login" autocomplete="on">
+    <h2>Sign in</h2>
+    <p>Use the same creator passcode as in the chat.</p>
+    <label class="f">Passcode<input class="in" id="pass" type="password" autocomplete="current-password" required></label>
+    <label class="check"><input type="checkbox" id="remember"> Remember on this device</label>
+    <button class="btn" type="submit" id="login-btn">Sign in</button>
+    <p class="msg" id="login-msg" role="status"></p>
+  </form>
+
+  <div id="app" hidden>
+    <form class="box" id="new-poll">
+      <h2>New poll</h2>
+      <p>It shows up on the home page right away.</p>
+      <label class="f">Question<input class="in" id="q" maxlength="200" placeholder="Which character should be next?" required></label>
+      <div class="f" style="display:grid;gap:6px;margin-bottom:6px;font-size:13px;font-weight:700;color:var(--soft)">Options</div>
+      <div id="opts"></div>
+      <button type="button" class="link" id="add-opt">+ Add option</button>
+      <div class="row2" style="margin-top:14px">
+        <label class="f">Ends
+          <select class="in" id="ends">
+            <option value="">When I close it</option>
+            <option value="1">In 1 day</option>
+            <option value="3">In 3 days</option>
+            <option value="7" selected>In 1 week</option>
+            <option value="30">In 1 month</option>
+            <option value="custom">Pick a date…</option>
+          </select>
+        </label>
+        <label class="f" id="custom-wrap" hidden>Date and time<input class="in" id="custom" type="datetime-local"></label>
+      </div>
+      <label class="check"><input type="checkbox" id="notify" checked> Send a notification to subscribers</label>
+      <button class="btn" type="submit" id="publish">Publish poll</button>
+      <p class="msg" id="poll-msg" role="status"></p>
+    </form>
+
+    <section class="box" id="push-box">
+      <h2>Notifications</h2>
+      <div id="push-off" hidden>
+        <p>Notifications are off. First add the <b>push</b> function in Supabase (see the instructions), then press the button. You only do this once.</p>
+        <button class="btn" type="button" id="push-init">Turn on notifications</button>
+      </div>
+      <form id="push-on" hidden>
+        <div class="stat-line"><b id="subs">0</b><span>people get notifications</span></div>
+        <p class="hint" style="margin:0 0 14px">Send your own message, for example when a new mod or teaser comes out.</p>
+        <label class="f">Title<input class="in" id="n-title" maxlength="80" placeholder="New teaser is out!" required></label>
+        <label class="f">Text<input class="in" id="n-body" maxlength="200" placeholder="Happy With You, part 2"></label>
+        <label class="f">Link (on your site)<input class="in" id="n-url" value="https://wermyle.github.io/"></label>
+        <button class="btn" type="submit" id="n-send">Send to everyone</button>
+      </form>
+      <p class="msg" id="push-msg" role="status"></p>
+    </section>
+
+    <section class="box" id="fan-mix-box">
+      <h2>Fan mixes <small id="mix-pending" style="color:#d9b25a;font-size:14px"></small></h2>
+      <p>Videos people sent from the Fan corner page. Approve them to show them on the site.</p>
+      <form class="add-line" id="mix-add">
+        <input class="in" id="mix-link" placeholder="Add a video yourself: YouTube link">
+        <button class="btn small" type="submit" id="mix-add-btn">Add</button>
+      </form>
+      <p class="msg" id="mix-msg" role="status"></p>
+      <div id="mix-list"><p class="hint">Loading…</p></div>
+    </section>
+
+    <section class="box" id="fan-art-box">
+      <h2>Fan art <small id="art-pending" style="color:#d9b25a;font-size:14px"></small></h2>
+      <p>Pictures waiting for you have a yellow frame. Only approved ones go up on the wall.</p>
+      <p class="msg" id="art-msg" role="status"></p>
+      <div class="arts" id="art-list"><p class="hint">Loading…</p></div>
+    </section>
+
+    <section class="box">
+      <h2>Your polls</h2>
+      <div id="list"><p class="hint">Loading…</p></div>
+    </section>
+  </div>
+</main>
+
+<script src="site.js"></script>
+<script>
+(function () {
+  const PUSH_URL = 'https://jhktsfthhmgshvzwbjmn.supabase.co/functions/v1/push';
+  const SITE = 'https://wermyle.github.io/';
+  const $ = id => document.getElementById(id);
+  const esc = t => String(t == null ? '' : t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const ls = { get: k => { try { return localStorage.getItem(k); } catch (_) { return null; } }, set: (k, v) => { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (_) {} } };
+  const ss = { get: k => { try { return sessionStorage.getItem(k); } catch (_) { return null; } }, set: (k, v) => { try { v == null ? sessionStorage.removeItem(k) : sessionStorage.setItem(k, v); } catch (_) {} } };
+  const say = (el, text, kind) => { el.textContent = text || ''; el.className = 'msg' + (kind ? ' ' + kind : ''); };
+  let pass = '';
+
+  async function admin(action, data) {
+    const out = await wm.rpc('poll_admin', { p_pass: pass, p_action: action, p_data: data || {} });
+    if (out && out.error) throw new Error(out.error);
+    return out;
+  }
+  async function push(body) {
+    let r;
+    try {
+      r = await fetch(PUSH_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pass, ...body }) });
+    } catch (_) { throw new Error('The push function is not reachable. Check that it is deployed in Supabase and named "push".'); }
+    if (r.status === 401) throw new Error('Supabase blocked the call: turn OFF "Verify JWT" in the push function settings.');
+    if (r.status === 404) throw new Error('The push function was not found. Deploy it in Supabase with the name "push".');
+    const out = await r.json().catch(() => ({}));
+    if (out.error) throw new Error(out.error);
+    return out;
+  }
+
+  // ---------- sign in ----------
+  const saved = ss.get('admin-pass') || ls.get('chat-pass') || '';
+  $('pass').value = saved;
+  $('remember').checked = !!ls.get('chat-pass');
+  $('login').addEventListener('submit', async e => {
+    e.preventDefault();
+    pass = $('pass').value;
+    $('login-btn').disabled = true;
+    say($('login-msg'), 'Checking…');
+    try {
+      await admin('check');
+      ss.set('admin-pass', pass);
+      ls.set('chat-pass', $('remember').checked ? pass : null);
+      $('login').hidden = true; $('app').hidden = false; $('logout').hidden = false;
+      load(); fans();
+    } catch (err) { say($('login-msg'), err.message, 'err'); }
+    $('login-btn').disabled = false;
+  });
+  $('logout').addEventListener('click', () => { ss.set('admin-pass', null); location.reload(); });
+  if (ss.get('admin-pass')) $('login').requestSubmit();
+
+  // ---------- new poll ----------
+  function optRow(v) {
+    const row = document.createElement('div');
+    row.className = 'opt-row';
+    row.innerHTML = `<input class="in" maxlength="80" placeholder="Option" value="${esc(v || '')}"><button type="button" class="x" aria-label="Remove option">×</button>`;
+    row.querySelector('.x').addEventListener('click', () => { if ($('opts').children.length > 2) { row.remove(); syncOpts(); } });
+    $('opts').appendChild(row);
+    syncOpts();
+  }
+  function syncOpts() {
+    const n = $('opts').children.length;
+    $('add-opt').hidden = n >= 6;
+    $('opts').querySelectorAll('.x').forEach(x => x.style.visibility = n > 2 ? 'visible' : 'hidden');
+  }
+  optRow(); optRow();
+  $('add-opt').addEventListener('click', () => { optRow(); $('opts').lastChild.querySelector('input').focus(); });
+  $('ends').addEventListener('change', () => { $('custom-wrap').hidden = $('ends').value !== 'custom'; });
+
+  $('new-poll').addEventListener('submit', async e => {
+    e.preventDefault();
+    const question = $('q').value.trim();
+    const options = [...$('opts').querySelectorAll('input')].map(i => i.value.trim()).filter(Boolean);
+    let ends_at = null;
+    const ends = $('ends').value;
+    if (ends === 'custom') {
+      if (!$('custom').value) return say($('poll-msg'), 'Pick the end date', 'err');
+      ends_at = new Date($('custom').value).toISOString();
+    } else if (ends) ends_at = new Date(Date.now() + ends * 86400000).toISOString();
+    $('publish').disabled = true;
+    say($('poll-msg'), 'Publishing…');
+    try {
+      await admin('create', { question, options, ends_at });
+      let text = 'Published!';
+      if ($('notify').checked && !$('notify').disabled) {
+        try {
+          const r = await push({ action: 'send', title: 'New poll!', body: question, url: SITE + '#polls' });
+          text += ` Notification sent to ${r.sent} ${r.sent === 1 ? 'person' : 'people'}.`;
+        } catch (err) { text += ' But the notification failed: ' + err.message; }
+      }
+      say($('poll-msg'), text, 'ok');
+      $('q').value = '';
+      $('opts').innerHTML = ''; optRow(); optRow();
+      load();
+    } catch (err) { say($('poll-msg'), err.message, 'err'); }
+    $('publish').disabled = false;
+  });
+
+  // ---------- notifications ----------
+  $('push-init').addEventListener('click', async () => {
+    $('push-init').disabled = true;
+    say($('push-msg'), 'Turning on…');
+    try { await push({ action: 'init' }); say($('push-msg'), 'Notifications are on! Visitors now see a "Notify me" button.', 'ok'); load(); }
+    catch (err) { say($('push-msg'), err.message, 'err'); }
+    $('push-init').disabled = false;
+  });
+  $('push-on').addEventListener('submit', async e => {
+    e.preventDefault();
+    $('n-send').disabled = true;
+    say($('push-msg'), 'Sending…');
+    try {
+      const r = await push({ action: 'send', title: $('n-title').value, body: $('n-body').value, url: $('n-url').value.trim() || SITE });
+      say($('push-msg'), `Sent to ${r.sent} ${r.sent === 1 ? 'person' : 'people'}` + (r.removed ? `, removed ${r.removed} that turned notifications off.` : '.'), 'ok');
+      $('n-title').value = ''; $('n-body').value = '';
+      load();
+    } catch (err) { say($('push-msg'), err.message, 'err'); }
+    $('n-send').disabled = false;
+  });
+
+  // ---------- fan corner ----------
+  const fanRpc = async (action, data) => {
+    const out = await wm.rpc('fan_admin', { p_pass: pass, p_action: action, p_data: data || {} });
+    if (out && out.error) throw new Error(out.error);
+    return out;
+  };
+  const tagOf = st => st === 'pending' ? '<span class="tag wait">Waiting</span>' : '<span class="tag open">On site</span>';
+  async function fans() {
+    let data;
+    try { data = await push({ action: 'fans_list' }); }
+    catch (err) {
+      $('mix-list').innerHTML = $('art-list').innerHTML = `<p class="msg err">${esc(err.message)}</p>`;
+      return;
+    }
+    const mp = data.mixes.filter(m => m.status === 'pending').length, ap = data.art.filter(a => a.status === 'pending').length;
+    $('mix-pending').textContent = mp ? mp + ' waiting' : '';
+    $('art-pending').textContent = ap ? ap + ' waiting' : '';
+    $('mix-list').innerHTML = data.mixes.length ? data.mixes.map(m => `<div class="fan-row" data-id="${m.id}">
+        <a href="https://www.youtube.com/watch?v=${esc(m.video_id)}" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/${esc(m.video_id)}/mqdefault.jpg" alt=""></a>
+        <div><div class="ap-top">${tagOf(m.status)}${m.short ? 'Shorts · ' : ''}${m.channel ? 'by ' + (m.channel_url ? `<a href="${esc(m.channel_url)}" target="_blank" rel="noopener" style="color:var(--head)">${esc(m.channel)}</a>` : esc(m.channel)) : ''}</div><b>${esc(m.title)}</b>
+        <div class="ap-btns">${m.status === 'pending' ? '<button class="btn small" data-mix="approve_mix">Approve</button>' : ''}<button class="btn danger small" data-mix="delete_mix">Delete</button></div></div></div>`).join('')
+      : '<p class="hint">Nothing yet.</p>';
+    $('art-list').innerHTML = data.art.length ? data.art.map(a => `<div class="art-tile ${a.status}" data-id="${a.id}">
+        <a href="${esc(a.url || '#')}" target="_blank" rel="noopener"><img src="${esc(a.url || '')}" alt="" loading="lazy"></a>
+        <div class="ap-top" style="margin:0">${tagOf(a.status)}</div>
+        <b>${a.title ? esc(a.title) : '<i style="color:var(--soft)">No title</i>'}</b><small>by ${esc(a.name)}${a.link ? ` · <a href="${esc(a.link)}" target="_blank" rel="noopener nofollow" style="color:var(--head);overflow-wrap:anywhere">${esc(a.link.replace(/^https?:\/\/(www\.)?/, ''))}</a>` : ''}</small>
+        <div class="ap-btns" style="margin-top:0">${a.status === 'pending' ? '<button class="btn small" data-art="art_approve">Approve</button>' : ''}<button class="btn danger small" data-art="art_delete">Delete</button></div></div>`).join('')
+      : '<p class="hint">Nothing yet.</p>';
+  }
+  // delete asks for a second click
+  const sure = b => {
+    if (!/delete/.test(b.dataset.mix || b.dataset.art) || b.classList.contains('sure')) return true;
+    b.classList.add('sure'); b.textContent = 'Sure?';
+    setTimeout(() => { b.classList.remove('sure'); b.textContent = 'Delete'; }, 3000);
+    return false;
+  };
+  $('mix-list').addEventListener('click', async e => {
+    const b = e.target.closest('[data-mix]');
+    if (!b || !sure(b)) return;
+    b.disabled = true;
+    try { await fanRpc(b.dataset.mix, { id: +b.closest('.fan-row').dataset.id }); fans(); }
+    catch (err) { say($('mix-msg'), err.message, 'err'); b.disabled = false; }
+  });
+  $('art-list').addEventListener('click', async e => {
+    const b = e.target.closest('[data-art]');
+    if (!b || !sure(b)) return;
+    b.disabled = true;
+    try { await push({ action: b.dataset.art, id: +b.closest('.art-tile').dataset.id }); fans(); }
+    catch (err) { say($('art-msg'), err.message, 'err'); b.disabled = false; }
+  });
+  $('mix-add').addEventListener('submit', async e => {
+    e.preventDefault();
+    $('mix-add-btn').disabled = true;
+    say($('mix-msg'), 'Adding…');
+    try { await push({ action: 'mix_add', link: $('mix-link').value }); $('mix-link').value = ''; say($('mix-msg'), 'Added to the site!', 'ok'); fans(); }
+    catch (err) { say($('mix-msg'), err.message, 'err'); }
+    $('mix-add-btn').disabled = false;
+  });
+
+  // ---------- poll list ----------
+  async function load() {
+    let data;
+    try { data = await admin('list'); }
+    catch (err) { $('list').innerHTML = `<p class="msg err">${esc(err.message)}</p>`; return; }
+    $('push-off').hidden = data.push_ready;
+    $('push-on').hidden = !data.push_ready;
+    $('subs').textContent = data.subscribers;
+    $('notify').disabled = !data.push_ready;
+    $('notify').closest('label').style.opacity = data.push_ready ? 1 : .5;
+    const polls = data.polls || [];
+    $('list').innerHTML = polls.length ? polls.map(p => {
+      const total = p.counts.reduce((a, b) => a + b, 0);
+      const ends = p.ends_at ? (p.open ? 'ends ' : 'ended ') + new Date(p.ends_at).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) : 'no end date';
+      return `<div class="ap" data-id="${p.id}">
+        <div class="ap-top"><span class="tag${p.open ? ' open' : ''}">${p.open ? 'Open' : 'Closed'}</span>${total} votes · ${ends}</div>
+        <h3>${esc(p.question)}</h3>
+        ${p.options.map((o, i) => { const pct = total ? Math.round(p.counts[i] / total * 100) : 0; return `<div class="bar" style="--w:${pct}%"><b>${esc(o)}</b><span>${p.counts[i]} · ${pct}%</span></div>`; }).join('')}
+        <div class="ap-btns">
+          <button class="btn line small" data-act="${p.open ? 'close' : 'reopen'}">${p.open ? 'Close now' : 'Reopen'}</button>
+          <button class="btn danger small" data-act="delete">Delete</button>
+        </div></div>`;
+    }).join('') : '<p class="hint">No polls yet. Create the first one above.</p>';
+  }
+  $('list').addEventListener('click', async e => {
+    const b = e.target.closest('[data-act]');
+    if (!b) return;
+    const act = b.dataset.act, id = +b.closest('.ap').dataset.id;
+    if (act === 'delete' && !b.classList.contains('sure')) {   // second click deletes
+      b.classList.add('sure'); b.textContent = 'Sure? Click again';
+      setTimeout(() => { b.classList.remove('sure'); b.textContent = 'Delete'; }, 3000);
+      return;
+    }
+    b.disabled = true;
+    try { await admin(act, { id }); load(); } catch (err) { alert(err.message); b.disabled = false; }
+  });
+})();
+</script>
+</body>
+</html>

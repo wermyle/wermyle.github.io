@@ -19,6 +19,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#bc9fcb">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,400;0,500;0,700;0,800;1,800&display=swap">
 <link rel="stylesheet" href="style.css">
@@ -167,6 +168,38 @@ section.alt{background:color-mix(in srgb,var(--night2) 65%,transparent)}
 .reply-bar span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .reply-bar b{color:var(--nc)}
 .reply-bar button{flex:none;width:28px;height:28px;border-radius:50%;border:0;background:var(--night2);color:var(--ink);font-size:18px;line-height:1;cursor:pointer}
+/* polls */
+.polls{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:24px;max-width:820px;margin:0 auto}
+.poll{display:grid;align-content:start;gap:14px;padding:22px;border-radius:22px;background:var(--night2);border:1px solid #3a3442}
+.poll-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.poll-tag{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:#3a3442;color:var(--soft)}
+.poll-tag.open{background:#3fbf6e;color:#0e2716}
+.poll-meta{font-size:13px;color:var(--soft);font-variant-numeric:tabular-nums}
+.poll h3{font-size:clamp(19px,2.4vw,23px);font-weight:800;line-height:1.25}
+.poll-opts{display:grid;gap:10px}
+.poll-opt{font:inherit;font-weight:700;text-align:left;color:var(--ink);background:var(--night);border:1px solid #4a4354;border-radius:14px;padding:12px 16px;cursor:pointer;transition:border-color .2s,background .2s,transform .15s}
+.poll-opt:hover{border-color:var(--head);background:color-mix(in srgb,var(--head) 12%,var(--night))}
+.poll-opt:active{transform:scale(.98)}
+.poll-opt:disabled{opacity:.6;cursor:wait}
+.poll-res{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-radius:14px;background:var(--night);border:1px solid #3a3442;overflow:hidden;isolation:isolate}
+.poll-res::before{content:"";position:absolute;inset:0 auto 0 0;width:var(--w);background:color-mix(in srgb,var(--head) 20%,transparent);z-index:-1;animation:grow .7s cubic-bezier(.2,.8,.2,1)}
+.poll-res b{font-weight:700;min-width:0;overflow-wrap:anywhere}
+.poll-res b i{font-style:normal;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--head);margin-left:6px;white-space:nowrap}
+.poll-res span{font-weight:800;font-variant-numeric:tabular-nums}
+.poll-res.mine{border-color:var(--head)}
+.poll-res.win::before{background:color-mix(in srgb,#3fbf6e 28%,transparent)}
+@keyframes grow{from{width:0}}
+.poll-err{margin:0;min-height:0;font-size:14px;font-weight:700;color:#ff8fa3}
+.poll-err:empty{display:none}
+.poll-empty{grid-column:1/-1;margin:0;text-align:center;color:var(--soft);padding:36px 20px;border:2px dashed #3a3442;border-radius:20px}
+.poll-foot{display:grid;justify-items:center;gap:10px;margin-top:30px;text-align:center}
+.notify{display:inline-flex;align-items:center;gap:10px;font:inherit;font-weight:800;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:12px 22px;border-radius:999px;border:2px solid var(--head);background:transparent;color:var(--head);cursor:pointer;transition:background .2s,color .2s}
+.notify svg{width:18px;height:18px;fill:currentColor}
+.notify:hover,.notify.on{background:var(--head);color:var(--night)}
+.notify:disabled{opacity:.5;cursor:default}
+.poll-note{margin:0;max-width:52ch;font-size:14px;color:var(--soft)}
+.poll-note:empty{display:none}
+@media (prefers-reduced-motion:reduce){.poll-res::before{animation:none}}
 </style>
 </head>
 <body>
@@ -180,7 +213,9 @@ section.alt{background:color-mix(in srgb,var(--night2) 65%,transparent)}
       <a href="#latest">Latest</a>
       <a href="#about">About</a>
       <a href="#projects">Mods</a>
+      <a href="fans.html">Fans</a>
       <a href="#stats">Numbers</a>
+      <a href="#polls">Polls</a>
       <a href="#contacts">Socials</a>
     </nav>
   </div>
@@ -252,6 +287,17 @@ section.alt{background:color-mix(in srgb,var(--night2) 65%,transparent)}
   </div>
 </section>
 
+<section id="polls">
+  <div class="wrap">
+    <div class="center"><h2>Polls</h2></div>
+    <div class="polls" id="poll-list" aria-live="polite"><p class="poll-empty">Loading polls…</p></div>
+    <div class="poll-foot">
+      <button type="button" class="notify" id="poll-notify" hidden></button>
+      <p class="poll-note" id="poll-note" role="status"></p>
+    </div>
+  </div>
+</section>
+
 <section id="quotes">
   <div class="wrap">
     <div class="center"><h2>Community</h2></div>
@@ -306,7 +352,7 @@ section.alt{background:color-mix(in srgb,var(--night2) 65%,transparent)}
   <div class="wrap foot">
     <div><div class="brandline">WERMYLE</div><p>Incredibox mods, animations, teasers, and more</p></div>
     <div><h4>Mods</h4><ul><li><a href="mods.html">All mods</a></li><li><a href="#projects">Featured</a></li></ul></div>
-    <div><h4>Community</h4><ul><li><a href="https://www.youtube.com/@wermyle" target="_blank" rel="noopener">YouTube</a></li><li><a href="#">Discord (soon)</a></li></ul></div>
+    <div><h4>Community</h4><ul><li><a href="fans.html">Fan corner</a></li><li><a href="https://www.youtube.com/@wermyle" target="_blank" rel="noopener">YouTube</a></li><li><a href="#">Discord (soon)</a></li></ul></div>
     <div><h4>More</h4><ul><li><a href="#about">About me</a></li><li><a href="#contacts">Socials</a></li></ul></div>
   </div>
   <div class="wrap copy">© 2026 wermyle</div>
@@ -338,7 +384,7 @@ wm.reveal([
   ['.latest-head','up'],['#feed .item','up',.08],['#feed-empty','up'],
   ['#about .art','impact'],['#about .text','right'],
   ['#projects .text','left'],['#projects .art','right'],
-  ['.center','up'],['.stat','up',.12],['.hub','up'],['.card','up',.15]
+  ['.center','up'],['.stat','up',.12],['.polls','up'],['.poll-foot','up'],['.hub','up'],['.card','up',.15]
 ]);
 
 /* top bar turns solid after the banner; counters fill from news.json (updated hourly) and run when they come into view */
