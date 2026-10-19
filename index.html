@@ -62,21 +62,6 @@ section.alt{background:color-mix(in srgb,var(--night2) 65%,transparent)}
 .cards{grid-template-columns:1fr}
 .hero .wrap{padding-block:32px 72px;flex-direction:column;text-align:center}
 }
-[data-from].pre{opacity:0}
-[data-from="left"].pre{transform:translateX(-90px)}
-[data-from="right"].pre{transform:translateX(90px)}
-[data-from="up"].pre{transform:translateY(60px)}
-[data-from="impact"].pre{opacity:0;transform:scale(1.7) rotate(20deg)}
-[data-from="impact"].hit{animation:impact .6s both}
-@keyframes impact{0%{opacity:0;transform:scale(1.7) rotate(20deg);animation-timing-function:cubic-bezier(.55,0,1,.45)}
-  12%{opacity:.25;transform:scale(1.62) rotate(19deg);animation-timing-function:cubic-bezier(.55,0,1,.45)}
-  42%{opacity:1;transform:scale(1) rotate(7deg);animation-timing-function:cubic-bezier(0,.55,.45,1)}
-  72%{transform:scale(1) rotate(-2deg);animation-timing-function:cubic-bezier(.3,0,.3,1)}
-  100%{opacity:1;transform:none}}
-@media (prefers-reduced-motion:reduce){
-[data-from].pre{opacity:1;transform:none}
-[data-from="impact"].hit{animation:none}
-}
 .latest-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px}
 .latest-head h2{font-size:clamp(32px,5vw,52px);font-weight:800;color:var(--head);text-transform:uppercase}
 .latest-head small{color:var(--soft);font-size:13px;font-variant-numeric:tabular-nums}
@@ -115,7 +100,7 @@ section.alt{background:color-mix(in srgb,var(--night2) 65%,transparent)}
 .panel{padding:20px}
 .chat-log{height:360px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding:6px 6px 6px 2px;overscroll-behavior:contain}
 .msg{display:grid;gap:3px;max-width:85%;min-width:0}
-.msg .who{font-size:13px;font-weight:800;color:var(--head)}
+.msg .who{font-size:13px;font-weight:800}
 .msg .who time{font-weight:500;color:var(--soft);margin-left:6px;font-variant-numeric:tabular-nums}
 .msg p{margin:0;background:var(--night);border:1px solid #3a3442;border-radius:4px 16px 16px 16px;padding:9px 13px;overflow-wrap:anywhere;white-space:pre-line}
 .msg.me{justify-self:end;align-self:flex-end;text-align:right}
@@ -149,6 +134,28 @@ section.alt{background:color-mix(in srgb,var(--night2) 65%,transparent)}
 .text h2,.center h2{font-size:clamp(32px,9vw,44px)}
 .stat b{font-size:clamp(30px,9vw,42px)}
 }
+/* chat: nick colours, replies, mentions, typing */
+.msg .who{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.msg.me .who{justify-content:flex-end}
+.msg .nick{font:inherit;font-size:13px;font-weight:800;color:var(--nc);background:none;border:0;padding:0;cursor:pointer}
+.msg .nick:hover{text-decoration:underline}
+.msg .reply-btn{font:inherit;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);background:none;border:0;padding:0 2px;cursor:pointer;opacity:0;transition:opacity .15s}
+.msg:hover .reply-btn,.msg:focus-within .reply-btn{opacity:1}
+@media (hover:none){.msg .reply-btn{opacity:.7}}
+.msg .reply-btn:hover{color:var(--ink)}
+.msg .quote{display:block;max-width:100%;font:inherit;font-size:13px;text-align:left;color:var(--soft);background:color-mix(in srgb,var(--qc,#888) 10%,transparent);border:0;border-left:3px solid var(--qc,#666);border-radius:4px 10px 10px 4px;padding:5px 10px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msg .quote b{color:var(--qc)}
+.msg .quote.gone{cursor:default;font-style:italic;--qc:#666}
+.msg .mention{color:var(--nc);font-weight:800;background:color-mix(in srgb,var(--nc) 16%,transparent);border-radius:6px;padding:0 3px}
+.msg.mentioned p{border-color:#ffd27a;box-shadow:0 0 0 1px #ffd27a inset;background:color-mix(in srgb,#ffd27a 10%,var(--night))}
+.msg.flash p{animation:flash 1.2s ease}
+@keyframes flash{30%{background:color-mix(in srgb,var(--head) 35%,var(--night))}}
+.chat-typing{margin:8px 2px 0;min-height:1.3em;font-size:13px;color:var(--soft);font-style:italic}
+.chat-typing b{font-style:normal}
+.reply-bar{display:flex;align-items:center;gap:10px;margin-top:8px;padding:8px 8px 8px 14px;border-left:3px solid var(--nc);border-radius:6px 12px 12px 6px;background:color-mix(in srgb,var(--nc) 10%,var(--night));font-size:13px;color:var(--soft)}
+.reply-bar span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.reply-bar b{color:var(--nc)}
+.reply-bar button{flex:none;width:28px;height:28px;border-radius:50%;border:0;background:var(--night2);color:var(--ink);font-size:18px;line-height:1;cursor:pointer}
 </style>
 </head>
 <body>
@@ -201,7 +208,7 @@ section.alt{background:color-mix(in srgb,var(--night2) 65%,transparent)}
     <img class="art" src="about.png" alt="wermyle character">
     <div class="text">
       <h2>ABOUT ME</h2>
-      <p>A few lines about you: who you are, what you make and what you love to create.</p>
+      <p>I'm wermyle, an Incredibox modder. I draw the characters, build the beats and animate everything that moves in my mods. Each one starts as a small idea, a mood, a colour or a sound, and grows into a little world you can play with.</p>
       <a class="btn" href="#contacts">Find me</a>
     </div>
   </div>
@@ -211,7 +218,7 @@ section.alt{background:color-mix(in srgb,var(--night2) 65%,transparent)}
   <div class="wrap split rev">
     <div class="text">
       <h2>Mods</h2>
-      <p>A short description of your mods: their sound, their style and what makes them different.</p>
+      <p>My mods bring new characters, sounds, effects and bonus animations to Incredibox. The current series, Heartbox, is all about soft, dreamy sounds, and it starts with Happy With You.</p>
       <a class="btn" href="mods.html">See all mods</a>
     </div>
     <picture class="art">
@@ -247,6 +254,8 @@ section.alt{background:color-mix(in srgb,var(--night2) 65%,transparent)}
         <div class="chat-log" id="chat-log" aria-live="polite">
           <p class="chat-empty" id="chat-empty">The chat will open soon.</p>
         </div>
+        <p class="chat-typing" id="chat-typing" aria-live="polite"></p>
+        <div class="reply-bar" id="chat-reply" hidden><span>Replying to <b></b>: <i></i></span><button type="button" aria-label="Cancel reply">×</button></div>
         <form class="chat-form" id="chat-form" novalidate>
           <label class="vh" for="chat-name">Nickname</label>
           <input id="chat-name" maxlength="24" placeholder="Nickname" autocomplete="nickname" required>
@@ -284,7 +293,7 @@ section.alt{background:color-mix(in srgb,var(--night2) 65%,transparent)}
 
 <footer>
   <div class="wrap foot">
-    <div><div class="brandline">WERMYLE</div><p>Music mods, animations and new sounds.</p></div>
+    <div><div class="brandline">WERMYLE</div><p>Incredibox mods, animations, teasers, and more</p></div>
     <div><h4>Mods</h4><ul><li><a href="mods.html">All mods</a></li><li><a href="#projects">Featured</a></li></ul></div>
     <div><h4>Community</h4><ul><li><a href="https://www.youtube.com/@wermyle" target="_blank" rel="noopener">YouTube</a></li><li><a href="#">Discord (soon)</a></li></ul></div>
     <div><h4>More</h4><ul><li><a href="#about">About me</a></li><li><a href="#contacts">Socials</a></li></ul></div>
@@ -292,6 +301,7 @@ section.alt{background:color-mix(in srgb,var(--night2) 65%,transparent)}
   <div class="wrap copy">© 2026 wermyle</div>
 </footer>
 
+<script src="site.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.1/dist/umd/supabase.js"></script>
 <script>
 /* build the WERMYLE rows: enough copies per row to cover twice the width, so the loop is seamless */
@@ -311,47 +321,14 @@ section.alt{background:color-mix(in srgb,var(--night2) 65%,transparent)}
   build();let t;addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(build,200)});
 })();
 
-(function(){
-  const set=(sel,dir)=>document.querySelectorAll(sel).forEach(el=>el.dataset.from=dir);
-  set('.hero .banner','up');
-  set('#about .art','impact');
-  set('#about .text','right');
-  set('#projects .text','left');
-  set('#projects .art','right');
-  set('.center','up');
-  set('.ctas','up');
-  document.querySelectorAll('.stat,.hub').forEach((el,i,all)=>{el.dataset.from='up';el.style.setProperty('--d',((i%4)*0.12)+'s')});
-  document.querySelectorAll('.card').forEach((el,i)=>{el.dataset.from='up';el.style.setProperty('--d',(i*0.15)+'s')});
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches||!('IntersectionObserver' in window))return;
-  const els=[...document.querySelectorAll('[data-from]')];
-  const vh=innerHeight;
-  // slide in when entering the screen, slide back out to its side when leaving (both scroll directions)
-  // watch each element's parent, which never moves or scales, so an element's own animation
-  // (e.g. the impact zoom) can't push it in and out of view and retrigger itself
-  const groups=new Map();
-  els.forEach(el=>{
-    const p=el.parentElement;
-    if(!groups.has(p))groups.set(p,[]);
-    groups.get(p).push(el);
-    const r=p.getBoundingClientRect();
-    if(r.top>=vh*0.9)el.classList.add('pre'); // below the fold starts hidden; visible ones stay shown
-  });
-  const io=new IntersectionObserver(es=>es.forEach(e=>{
-    (groups.get(e.target)||[]).forEach(el=>{
-      const on=e.isIntersecting;
-      if(el.dataset.from==='impact'){
-        if(on&&!el.classList.contains('hit')){el.classList.remove('pre');el.classList.add('hit')}
-        else if(!on){el.classList.remove('hit');el.classList.add('pre')}
-      }else el.classList.toggle('pre',!on);
-    });
-  }),{threshold:.1});
-  groups.forEach((_,p)=>io.observe(p));
-  // hero plays once on load
-  document.querySelectorAll('.hero [data-from]').forEach(el=>{
-    el.classList.add('pre');
-    requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.remove('pre')));
-  });
-})();
+/* scroll-reveal animations (engine in site.js) */
+wm.reveal([
+  ['.hero .banner','up'],['.ctas','up'],
+  ['.latest-head','up'],['#feed .item','up',.08],['#feed-empty','up'],
+  ['#about .art','impact'],['#about .text','right'],
+  ['#projects .text','left'],['#projects .art','right'],
+  ['.center','up'],['.stat','up',.12],['.hub','up'],['.card','up',.15]
+]);
 
 /* top bar turns solid after the banner; counters fill from news.json (updated hourly) and run when they come into view */
 (function(){
@@ -392,10 +369,10 @@ section.alt{background:color-mix(in srgb,var(--night2) 65%,transparent)}
     if(!items.length)return;
     box.innerHTML=items.map(it=>{
       const isPost=it.type==='post';
-      const badge=isPost?'<span class="badge post">Discord</span>':it.short?'<span class="badge short">Short</span>':'<span class="badge">Video</span>';
+      const badge=isPost?'<span class="badge post">Discord</span>':it.short?'<span class="badge short">Shorts</span>':'<span class="badge">Video</span>';
       const media=it.thumb?`<img src="${esc(it.thumb)}" alt="" loading="lazy">`:`<div class="post-text">${esc(it.title)}</div>`;
       const views=it.views!=null?` · ${Number(it.views).toLocaleString('en-US')} views`:'';
-      const tag=it.url?'a':'div',href=it.url?` href="${esc(it.url)}" target="_blank" rel="noopener"`:'';
+      const tag=it.url?'a':'div',href=it.url?` href="${esc(it.url)}" target="_blank" rel="noopener"`+(isPost?'':` data-video="${esc(it.id)}" data-title="${esc(it.title)}"`+(it.short?' data-short="1"':'')):'';
       return `<${tag} class="item"${href}><div class="thumb">${media}${badge}${isPost?'':'<div class="play"><span></span></div>'}</div>`+
              (isPost&&!it.thumb?'':`<h3>${esc(it.title)}</h3>`)+`<div class="meta">${ago(it.date)}${views}</div></${tag}>`;
     }).join('');
@@ -425,7 +402,8 @@ section.alt{background:color-mix(in srgb,var(--night2) 65%,transparent)}
   // site chat
   const log=document.getElementById('chat-log'),empty=document.getElementById('chat-empty'),form=document.getElementById('chat-form');
   const nameEl=document.getElementById('chat-name'),msgEl=document.getElementById('chat-msg'),send=document.getElementById('chat-send');
-  const status=document.getElementById('chat-status'),live=document.getElementById('chat-live');
+  const status=document.getElementById('chat-status'),live=document.getElementById('chat-live'),typingEl=document.getElementById('chat-typing');
+  const replyBar=document.getElementById('chat-reply'),passEl=document.getElementById('chat-pass');
   const say=(t,err)=>{status.textContent=t;status.className='chat-status'+(err?' err':'')};
   try{nameEl.value=localStorage.getItem('chat-name')||''}catch(_){}
   if(!SUPABASE_URL||!SUPABASE_KEY||!window.supabase){send.disabled=true;nameEl.disabled=msgEl.disabled=true;if(SUPABASE_URL)empty.textContent='The chat could not load. Try refreshing the page.';return}
@@ -433,8 +411,6 @@ section.alt{background:color-mix(in srgb,var(--night2) 65%,transparent)}
   const esc=t=>String(t||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const hm=d=>new Date(d).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
   const BAD=/(https?:\/\/|www\.|\.(com|net|org|ru|gg|io|xyz)\b|discord\.gg|t\.me\/)/i;
-  const shown=new Set();
-  const passEl=document.getElementById('chat-pass');
   // a random key for this browser: proves that a nickname belongs to the same person next time
   let device='';try{device=localStorage.getItem('chat-device')||''}catch(_){}
   if(device.length<16){const a=new Uint8Array(16);crypto.getRandomValues(a);device=[...a].map(b=>b.toString(16).padStart(2,'0')).join('');try{localStorage.setItem('chat-device',device)}catch(_){}}
@@ -442,24 +418,89 @@ section.alt{background:color-mix(in srgb,var(--night2) 65%,transparent)}
   const looksReserved=n=>/werm|вермэ|верме|admin|админ/i.test(n);
   const togglePass=()=>{passEl.hidden=!(looksReserved(nameEl.value)&&!savedPass)};
   nameEl.addEventListener('input',togglePass);togglePass();
-  function me(){try{return localStorage.getItem('chat-name')||''}catch(_){return ''}}
+  const me=()=>{try{return localStorage.getItem('chat-name')||''}catch(_){return ''}};
+  const same=(a,b)=>a.trim().toLowerCase()===b.trim().toLowerCase();
+
+  // every nickname gets its own colour, always the same one
+  const COLORS=['#ff9ecf','#8fd0ff','#b6ee8a','#ffd27a','#c9a7ff','#7fe9cf','#ff9f8a','#f2a6ff','#9fe0ff','#ffe39a','#a8b8ff','#ffb3a1'];
+  const colorOf=n=>{let h=0;for(const c of n.trim().toLowerCase())h=(h*31+c.codePointAt(0))>>>0;return COLORS[h%COLORS.length]};
+  const nickColor=m=>m.verified?'var(--head)':colorOf(m.name);
+
+  // @mentions: highlight known nicknames written after @
+  const msgs=new Map(),names=new Set();
+  function withMentions(text){
+    const known=[...names].sort((a,b)=>b.length-a.length);let out='',i=0;
+    while(i<text.length){
+      const at=text.indexOf('@',i);if(at<0){out+=esc(text.slice(i));break}
+      out+=esc(text.slice(i,at));
+      const rest=text.slice(at+1),hit=known.find(n=>rest.toLowerCase().startsWith(n.toLowerCase())&&!/[\p{L}\p{N}_]/u.test(rest.charAt(n.length)));
+      if(hit){out+=`<span class="mention" style="--nc:${colorOf(hit)}">@${esc(rest.slice(0,hit.length))}</span>`;i=at+1+hit.length}
+      else{out+='@';i=at+1}
+    }
+    return out;
+  }
+  const mentionsMe=m=>{const n=me();if(!n||same(m.name,n))return false;
+    if(m.reply_to&&msgs.has(m.reply_to)&&same(msgs.get(m.reply_to).name,n))return true;
+    return new RegExp('@'+n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(?![\\p{L}\\p{N}_])','iu').test(m.message)};
+
   function add(m){
-    if(shown.has(m.id))return;shown.add(m.id);
+    if(msgs.has(m.id))return;
+    msgs.set(m.id,m);names.add(m.name);hideTyping(m.name);
     empty.hidden=true;
     const near=log.scrollHeight-log.scrollTop-log.clientHeight<80;
-    const el=document.createElement('div');el.className='msg'+(m.name===me()?' me':'')+(m.verified?' creator':'');el.dataset.id=m.id;
-    el.innerHTML=`<span class="who">${esc(m.name)}${m.verified?'<span class="badge-creator">CREATOR</span>':''}<time>${hm(m.created_at)}</time></span><p>${esc(m.message)}</p>`;
+    const el=document.createElement('div');
+    el.className='msg'+(same(m.name,me())?' me':'')+(m.verified?' creator':'')+(mentionsMe(m)?' mentioned':'');
+    el.dataset.id=m.id;el.style.setProperty('--nc',nickColor(m));
+    const q=m.reply_to&&msgs.get(m.reply_to);
+    const quote=m.reply_to?(q?`<button type="button" class="quote" data-to="${q.id}" style="--qc:${nickColor(q)}"><b>${esc(q.name)}</b> ${esc(q.message.slice(0,80))}</button>`
+                               :'<span class="quote gone">Reply to an earlier message</span>'):'';
+    el.innerHTML=`<span class="who"><button type="button" class="nick" title="Mention ${esc(m.name)}">${esc(m.name)}</button>${m.verified?'<span class="badge-creator">CREATOR</span>':''}<time>${hm(m.created_at)}</time>`+
+      `<button type="button" class="reply-btn" aria-label="Reply to ${esc(m.name)}">Reply</button></span>${quote}<p>${withMentions(m.message)}</p>`;
     log.appendChild(el);
     while(log.querySelectorAll('.msg').length>80)log.querySelector('.msg').remove();
     if(near)log.scrollTop=log.scrollHeight;
   }
+
+  // replying, mentioning and jumping to the quoted message
+  let replyTo=null;
+  function setReply(m){
+    replyTo=m?m.id:null;replyBar.hidden=!m;
+    if(m){replyBar.style.setProperty('--nc',nickColor(m));replyBar.querySelector('b').textContent=m.name;replyBar.querySelector('i').textContent=m.message.slice(0,60);msgEl.focus()}
+  }
+  replyBar.querySelector('button').addEventListener('click',()=>setReply(null));
+  log.addEventListener('click',e=>{
+    const row=e.target.closest('.msg');if(!row)return;const m=msgs.get(+row.dataset.id);
+    if(e.target.closest('.reply-btn'))setReply(m);
+    else if(e.target.closest('.nick')){const tag='@'+m.name+' ';if(!msgEl.value.includes(tag))msgEl.value=(msgEl.value.trim()?msgEl.value.trim()+' ':'')+tag;msgEl.focus()}
+    else{const qb=e.target.closest('.quote[data-to]');if(qb){const t=log.querySelector(`.msg[data-id="${qb.dataset.to}"]`);if(t){t.scrollIntoView({block:'center',behavior:'smooth'});t.classList.remove('flash');void t.offsetWidth;t.classList.add('flash')}}}
+  });
+
+  // "NICK is typing…"
+  const typers=new Map();
+  function renderTyping(){
+    const list=[...typers.keys()];
+    typingEl.innerHTML=!list.length?'':list.length>2?'Several people are typing…':
+      list.map(n=>`<b style="color:${colorOf(n)}">${esc(n)}</b>`).join(' and ')+(list.length>1?' are typing…':' is typing…');
+  }
+  function hideTyping(n){for(const k of typers.keys())if(same(k,n)){clearTimeout(typers.get(k));typers.delete(k)}renderTyping()}
+
   empty.textContent='No messages yet. Start the conversation!';
-  db.from('chat_messages').select('id,name,message,created_at,verified').order('id',{ascending:false}).limit(50)
+  db.from('chat_messages').select('id,name,message,created_at,verified,reply_to').order('id',{ascending:false}).limit(50)
     .then(({data})=>{(data||[]).reverse().forEach(add);log.scrollTop=log.scrollHeight});
-  db.channel('site-chat')
+  const channel=db.channel('site-chat',{config:{broadcast:{self:false}}})
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'chat_messages'},p=>add(p.new))
     .on('postgres_changes',{event:'DELETE',schema:'public',table:'chat_messages'},p=>{const n=log.querySelector(`.msg[data-id="${p.old.id}"]`);if(n)n.remove()})
+    .on('broadcast',{event:'typing'},({payload})=>{
+      const n=String(payload&&payload.name||'').trim().slice(0,24);if(!n||same(n,me()))return;
+      hideTyping(n);typers.set(n,setTimeout(()=>{typers.delete(n);renderTyping()},3500));renderTyping();
+    })
     .subscribe(st=>{live.hidden=st!=='SUBSCRIBED'});
+  let lastTyping=0;
+  msgEl.addEventListener('input',()=>{
+    const n=nameEl.value.trim();if(!n||!msgEl.value.trim()||Date.now()-lastTyping<2000)return;
+    lastTyping=Date.now();channel.send({type:'broadcast',event:'typing',payload:{name:n}});
+  });
+
   let last=0;
   form.addEventListener('submit',async e=>{
     e.preventDefault();
@@ -473,12 +514,12 @@ section.alt{background:color-mix(in srgb,var(--night2) 65%,transparent)}
     try{localStorage.setItem('chat-name',name)}catch(_){}
     const pass=savedPass||passEl.value.trim()||null;
     if(looksReserved(name)&&!pass){send.disabled=false;passEl.hidden=false;passEl.focus();return say('This nickname is reserved. Pick another one.',1)}
-    const {error}=await db.rpc('chat_send',{p_name:name,p_message:message,p_device:device,p_pass:pass});
+    const {error}=await db.rpc('chat_send',{p_name:name,p_message:message,p_device:device,p_pass:pass,p_reply_to:replyTo});
     if(!error&&pass&&!savedPass){savedPass=pass;try{localStorage.setItem('chat-pass',pass)}catch(_){};passEl.value='';passEl.hidden=true}
     send.disabled=false;
     if(error){const m=error.message||'';if(/Wrong passcode/i.test(m)){savedPass='';try{localStorage.removeItem('chat-pass')}catch(_){};passEl.hidden=false}
     say(/Wrong passcode/i.test(m)?'Wrong passcode.':/reserved/i.test(m)?'This nickname is reserved. Pick another one.':/taken/i.test(m)?'This nickname is already taken. Pick another one.':/paused/i.test(m)?'The chat is paused right now.':/not allowed/i.test(m)?'You can\'t send messages in this chat.':/busy/i.test(m)?'Slow down, try again in a minute.':/Duplicate/i.test(m)?'You already sent that.':/chat_clean|check/i.test(m)?'That message breaks the chat rules.':'Could not send, try again.',1);return}
-    msgEl.value='';msgEl.focus();
+    msgEl.value='';setReply(null);msgEl.focus();
   });
 })();
 </script>

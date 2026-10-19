@@ -9,7 +9,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#1d1a21">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,400;0,500;0,700;0,800;1,800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Allan:wght@400&family=Raleway:ital,wght@0,400;0,500;0,700;0,800;1,800&display=swap">
 <link rel="stylesheet" href="style.css">
 <style>
 .top{position:fixed;top:0;left:0;right:0;z-index:6;background:color-mix(in srgb,var(--night) 92%,transparent);box-shadow:0 6px 24px rgba(0,0,0,.35);transition:background .3s,box-shadow .3s}
@@ -39,8 +39,8 @@
 .entry .series-label{font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;opacity:.8}
 .entry .title{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .entry .ver{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:18px;background:rgba(0,0,0,.28);box-shadow:0 0 0 3px rgba(255,255,255,.35),0 0 0 7px rgba(0,0,0,.18);flex:none}
-.entry h3{font-size:clamp(34px,5vw,64px);font-weight:800;font-style:italic;letter-spacing:-.01em;line-height:1}
-.entry .genre{font-size:clamp(18px,2.2vw,22px);font-weight:800;opacity:.85}
+.entry h3,.modal-box h3{font-family:"Allan","Raleway",system-ui,sans-serif;font-size:clamp(44px,6vw,80px);font-weight:400;font-style:normal;letter-spacing:.01em;line-height:.95}
+.entry .genre,.modal-box .genre{font-size:clamp(18px,2.2vw,22px);font-weight:800;color:color-mix(in srgb,var(--c,var(--mc)) 45%,#000)}
 .entry p{margin:0;font-size:17px;line-height:1.6;max-width:50ch;opacity:.95}
 .entry .new{position:absolute;top:24px;left:max(24px,env(safe-area-inset-left,0px));z-index:2;font-size:11px;font-weight:800;letter-spacing:.14em;padding:6px 12px;border-radius:999px;background:#fff;color:var(--c)}
 .entry .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
@@ -57,12 +57,13 @@
 .entry .art{min-height:260px}
 .entry .info{padding:4px max(56px,calc(env(safe-area-inset-right,0px) + 56px)) 30px max(20px,env(safe-area-inset-left,0px));max-width:none}
 }
-.entry .art.has-img{display:block;background:none;-webkit-mask:linear-gradient(90deg,#000 70%,transparent 100%);mask:linear-gradient(90deg,#000 70%,transparent 100%)}
-.entry .art.has-img .scene img{position:absolute;left:50%;top:50%;width:150%;max-width:none;height:auto;transform:translate(-52%,-50%);opacity:.95}
-.entry .art.has-img .cast img{position:absolute;left:50%;bottom:-4%;width:auto;height:96%;max-width:none;transform:translateX(-50%);filter:drop-shadow(0 18px 30px rgba(30,10,50,.35))}
+.entry .art.has-img{display:block;background:none;-webkit-mask:linear-gradient(90deg,#000 84%,transparent 100%);mask:linear-gradient(90deg,#000 84%,transparent 100%)}
+.entry .art.has-img .scene img{position:absolute;left:62%;top:50%;width:150%;max-width:none;height:auto;transform:translate(-50%,-50%);opacity:.95}
+.entry .art.has-img .cast img{position:absolute;left:70%;bottom:-4%;width:auto;height:96%;max-width:none;transform:translateX(-50%);filter:drop-shadow(0 18px 30px rgba(30,10,50,.35))}
 @media (max-width:760px){
 .entry .art.has-img{min-height:340px;-webkit-mask:linear-gradient(180deg,#000 80%,transparent 100%);mask:linear-gradient(180deg,#000 80%,transparent 100%)}
-.entry .art.has-img .cast img{height:92%}
+.entry .art.has-img .cast img{height:92%;left:50%}
+.entry .art.has-img .scene img{left:50%}
 }
 .entry .actions button.more{font:inherit;padding:11px 22px;border-radius:999px;background:rgba(0,0,0,.32);color:#fff;font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;border:0;cursor:pointer;transition:background .2s}
 .entry .actions button.more:hover{background:rgba(0,0,0,.5)}
@@ -139,8 +140,8 @@ body.lock{overflow:hidden}
         </div>
         <div class="info">
           <span class="series-label">Heartbox</span>
-          <div class="title"><span class="ver">V1</span><h3>HAPPY WITH YOU</h3></div>
-          <span class="genre">Dreampop, Chillwave</span>
+          <div class="title"><span class="ver">V1</span><h3>Happy With You</h3></div>
+          <span class="genre">Dreampop</span>
           <p>Somewhere between dreams and reality, a forgotten world awaits.</p>
           <div class="actions"><a href="#">Download</a><button type="button" class="more" data-open="happy-with-you">Read more</button></div>
         </div>
@@ -165,7 +166,7 @@ body.lock{overflow:hidden}
 
 <footer>
   <div class="wrap foot">
-    <div><div class="brandline">WERMYLE</div><p>Incredibox mods, animations and new sounds.</p></div>
+    <div><div class="brandline">WERMYLE</div><p>Incredibox mods, animations, teasers, and more</p></div>
     <div><h4>Mods</h4><ul><li><a href="mods.html">All mods</a></li><li><a href="./#projects">Featured</a></li></ul></div>
     <div><h4>Community</h4><ul><li><a href="https://www.youtube.com/@wermyle" target="_blank" rel="noopener">YouTube</a></li><li><a href="#">Discord (soon)</a></li></ul></div>
     <div><h4>More</h4><ul><li><a href="./#about">About me</a></li><li><a href="./#contacts">Socials</a></li></ul></div>
@@ -173,6 +174,7 @@ body.lock{overflow:hidden}
   <div class="wrap copy">© 2026 wermyle</div>
 </footer>
 
+<script src="site.js"></script>
 <script>
 /* background rows of WERMYLE */
 (function(){
@@ -213,7 +215,7 @@ body.lock{overflow:hidden}
     modal.hidden=false;document.body.classList.add('lock');modal.querySelector('.modal-x').focus();
     load().then(d=>{
       const t=(d.teasers||{})[mod]||[];
-      list.innerHTML=t.length?t.map(v=>`<a class="teaser" href="${esc(v.url)}" target="_blank" rel="noopener"><span class="th"><img src="${esc(v.thumb)}" alt="" loading="lazy"></span><b>${esc(v.title)}</b><small>${day(v.date)}</small></a>`).join('')
+      list.innerHTML=t.length?t.map(v=>`<a class="teaser" href="${esc(v.url)}" target="_blank" rel="noopener" data-video="${esc(v.id)}" data-title="${esc(v.title)}"${/\/shorts\//.test(v.url)?' data-short="1"':''}><span class="th"><img src="${esc(v.thumb)}" alt="" loading="lazy"></span><b>${esc(v.title)}</b><small>${day(v.date)}</small></a>`).join('')
         :'<p class="teasers-empty">No teasers yet. They will show up here automatically as soon as they are on the YouTube channel.</p>';
     });
   }
@@ -221,6 +223,13 @@ body.lock{overflow:hidden}
   document.addEventListener('click',e=>{const b=e.target.closest('[data-open]');if(b)open(b);if(e.target.closest('[data-close]'))close()});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)close()});
 })();
+
+/* scroll-reveal animations (engine in site.js) */
+wm.reveal([
+  ['.mhero .avatar','left'],['.mhero .wrap > div','right'],
+  ['.back','up'],['.series-head','up'],
+  ['.entry .art','left'],['.entry .info','right'],['.soon','up']
+]);
 </script>
 </body>
 </html>
