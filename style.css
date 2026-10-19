@@ -147,5 +147,14 @@ body.lock{overflow:hidden}
 .player-frame iframe{width:100%;height:100%;border:0;display:block}
 @keyframes fadein{from{opacity:0}}
 @keyframes popin{from{opacity:0;transform:translateY(24px) scale(.96)}}
+/* Shorts: YouTube draws its own title bar and "Shorts" logo at the very top and bottom of the embed.
+   Making the embed taller than the frame pushes those strips out of view; the 9:16 video itself stays whole. */
+.player.vertical:not(.native) .player-stage>iframe{inset:auto;top:50%;left:0;width:100%;height:calc(100% + 150px);transform:translateY(-50%)}
+/* narrow player (Shorts): compact controls */
+.player.vertical .pc-vol{display:none}
+.player.vertical .pc-time{min-width:0;font-size:12px}
+.player.vertical .player-ctl{gap:6px;padding:28px 10px 10px}
+.player.vertical .pc-seek{min-width:40px}
+.player.vertical .player-title{font-size:14px}
 @media (max-width:760px){.player-yt{display:none}.pc-vol{display:none}.pc-time{min-width:0;font-size:12px}}
 @media (prefers-reduced-motion:reduce){.player-bg,.player-box{animation:none}}
