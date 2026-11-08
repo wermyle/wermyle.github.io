@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-08T17:02:06+00:00",
+  "updated": "2026-11-08T21:09:37+00:00",
   "items": [
     {
       "type": "video",
@@ -8,7 +8,7 @@
       "date": "2026-11-06T09:26:20+00:00",
       "url": "https://www.youtube.com/shorts/rP22KV9hJOo",
       "thumb": "https://i.ytimg.com/vi/rP22KV9hJOo/hqdefault.jpg",
-      "views": 973,
+      "views": 984,
       "short": true
     },
     {
@@ -28,7 +28,7 @@
       "date": "2026-09-27T15:18:32+00:00",
       "url": "https://www.youtube.com/shorts/dSK09DO8AX0",
       "thumb": "https://i.ytimg.com/vi/dSK09DO8AX0/hqdefault.jpg",
-      "views": 2436,
+      "views": 2444,
       "short": true
     },
     {
@@ -38,7 +38,7 @@
       "date": "2026-09-20T17:53:45+00:00",
       "url": "https://www.youtube.com/shorts/NtF5F61L6cQ",
       "thumb": "https://i.ytimg.com/vi/NtF5F61L6cQ/hqdefault.jpg",
-      "views": 1355,
+      "views": 1413,
       "short": true
     },
     {
@@ -48,7 +48,7 @@
       "date": "2026-07-31T18:21:27+00:00",
       "url": "https://www.youtube.com/watch?v=tpiZdoZ9Y7k",
       "thumb": "https://i.ytimg.com/vi/tpiZdoZ9Y7k/hqdefault.jpg",
-      "views": 5070,
+      "views": 5076,
       "short": false
     },
     {
@@ -64,7 +64,7 @@
   ],
   "stats": {
     "subscribers": 369,
-    "views": 59443,
+    "views": 59786,
     "videos": 15
   },
   "teasers": {
